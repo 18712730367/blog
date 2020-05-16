@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://blog.801314.top</id>
     <title>黑娃子</title>
-    <updated>2020-05-16T14:43:10.261Z</updated>
+    <updated>2020-05-16T14:46:59.012Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://blog.801314.top"/>
     <link rel="self" href="http://blog.801314.top/atom.xml"/>
@@ -10,6 +10,16 @@
     <logo>http://blog.801314.top/images/avatar.png</logo>
     <icon>http://blog.801314.top/favicon.ico</icon>
     <rights>All rights reserved 2020, 黑娃子</rights>
+    <entry>
+        <title type="html"><![CDATA[First ]]></title>
+        <id>http://blog.801314.top/post/first/</id>
+        <link href="http://blog.801314.top/post/first/">
+        </link>
+        <updated>2020-05-16T14:44:08.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="http://blog.801314.top/post-images/1589640402631.jpg" alt="" loading="lazy"></figure>
+<p>整了很久终于搞定了，之后可以作为个人博客发布内容了😀</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
         <id>http://blog.801314.top/post/hello-gridea/</id>
