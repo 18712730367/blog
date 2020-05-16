@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://blog</id>
+    <id>https://blog.github.com</id>
     <title>黑娃子</title>
-    <updated>2020-05-16T14:22:25.859Z</updated>
+    <updated>2020-05-16T14:25:54.730Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://blog"/>
-    <link rel="self" href="https://blog/atom.xml"/>
+    <link rel="alternate" href="https://blog.github.com"/>
+    <link rel="self" href="https://blog.github.com/atom.xml"/>
     <subtitle>温故而知新</subtitle>
-    <logo>https://blog/images/avatar.png</logo>
-    <icon>https://blog/favicon.ico</icon>
+    <logo>https://blog.github.com/images/avatar.png</logo>
+    <icon>https://blog.github.com/favicon.ico</icon>
     <rights>All rights reserved 2020, 黑娃子</rights>
 </feed>
