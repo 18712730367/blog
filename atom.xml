@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://blog.801314.top</id>
     <title>黑白杂色</title>
-    <updated>2020-05-19T07:28:47.658Z</updated>
+    <updated>2020-05-19T07:58:50.630Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://blog.801314.top"/>
     <link rel="self" href="http://blog.801314.top/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>http://blog.801314.top/images/avatar.png</logo>
     <icon>http://blog.801314.top/favicon.ico</icon>
     <rights>All rights reserved 2020, 黑白杂色</rights>
+    <entry>
+        <title type="html"><![CDATA[资深架构师成长路线 -- 设计思想解读开源框架]]></title>
+        <id>http://blog.801314.top/post/jiagoushi1/</id>
+        <link href="http://blog.801314.top/post/jiagoushi1/">
+        </link>
+        <updated>2020-05-19T07:29:28.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[资深架构师成长路线 -- 架构师筑基必备技能]]></title>
         <id>http://blog.801314.top/post/jiagoushi/</id>
