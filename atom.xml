@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://blog.801314.top</id>
     <title>黑白杂色</title>
-    <updated>2020-05-19T09:22:46.145Z</updated>
+    <updated>2020-05-19T09:39:09.318Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://blog.801314.top"/>
     <link rel="self" href="http://blog.801314.top/atom.xml"/>
@@ -16,6 +16,16 @@
         <link href="http://blog.801314.top/post/jiagoushi3/">
         </link>
         <updated>2020-05-19T08:49:45.000Z</updated>
+        <summary type="html"><![CDATA[<h2 id="1-分布式架构思维">1、分布式架构思维</h2>
+<h3 id="大型互联网架构严谨过程">大型互联网架构严谨过程</h3>
+<h3 id="架构师应具备的分布式知识">架构师应具备的分布式知识</h3>
+<h3 id="主流分布式架构设计详解">主流分布式架构设计详解</h3>
+]]></summary>
+        <content type="html"><![CDATA[<h2 id="1-分布式架构思维">1、分布式架构思维</h2>
+<h3 id="大型互联网架构严谨过程">大型互联网架构严谨过程</h3>
+<h3 id="架构师应具备的分布式知识">架构师应具备的分布式知识</h3>
+<h3 id="主流分布式架构设计详解">主流分布式架构设计详解</h3>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[资深架构师成长路线 -- 设计思想解读开源框架]]></title>
@@ -23,6 +33,22 @@
         <link href="http://blog.801314.top/post/jiagoushi1/">
         </link>
         <updated>2020-05-19T07:29:28.000Z</updated>
+        <summary type="html"><![CDATA[<h2 id="1-六大原则">1、六大原则</h2>
+<h3 id="单一职责原则">单一职责原则</h3>
+<h3 id="开闭原则">开闭原则</h3>
+<h3 id="里氏替换原则">里氏替换原则</h3>
+<h3 id="依赖倒置原则">依赖倒置原则</h3>
+<h3 id="接口隔离原则">接口隔离原则</h3>
+<h3 id="迪米特法则">迪米特法则</h3>
+]]></summary>
+        <content type="html"><![CDATA[<h2 id="1-六大原则">1、六大原则</h2>
+<h3 id="单一职责原则">单一职责原则</h3>
+<h3 id="开闭原则">开闭原则</h3>
+<h3 id="里氏替换原则">里氏替换原则</h3>
+<h3 id="依赖倒置原则">依赖倒置原则</h3>
+<h3 id="接口隔离原则">接口隔离原则</h3>
+<h3 id="迪米特法则">迪米特法则</h3>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[资深架构师成长路线 -- 架构师筑基必备技能]]></title>
@@ -30,6 +56,22 @@
         <link href="http://blog.801314.top/post/jiagoushi/">
         </link>
         <updated>2020-05-19T06:34:27.000Z</updated>
+        <summary type="html"><![CDATA[<h2 id="1-并发编程进阶">1、并发编程进阶</h2>
+<h3 id="线程共享和写作文">线程共享和写作文</h3>
+<ul>
+<li>CPU核心数，线程数，时间片轮转机制解读</li>
+<li>synchronized，volatile，ThreadLocal 如何实现线程共享</li>
+<li>wait，notify/nofityAll，join 方法如何实现线程间协作</li>
+</ul>
+]]></summary>
+        <content type="html"><![CDATA[<h2 id="1-并发编程进阶">1、并发编程进阶</h2>
+<h3 id="线程共享和写作文">线程共享和写作文</h3>
+<ul>
+<li>CPU核心数，线程数，时间片轮转机制解读</li>
+<li>synchronized，volatile，ThreadLocal 如何实现线程共享</li>
+<li>wait，notify/nofityAll，join 方法如何实现线程间协作</li>
+</ul>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[《教父》中老教父 维托·唐·柯里昂的经典名言]]></title>
@@ -37,6 +79,14 @@
         <link href="http://blog.801314.top/post/lesslessjiao-fu-greatergreater-zhong-lao-jiao-fu-wei-tuo-tang-ke-li-ang-de-jing-dian-ming-yan/">
         </link>
         <updated>2020-05-19T06:13:06.000Z</updated>
+        <summary type="html"><![CDATA[<p>分享一些《教父》里很精辟地诠释了社会人生的台词：</p>
+<p>1、但凡男女之间的那点“意思”，常常是从“不好意思”开始，到“真没意思”结束。</p>
+<p>2、不要憎恨你的敌人，那会影响你的判断力。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>分享一些《教父》里很精辟地诠释了社会人生的台词：</p>
+<p>1、但凡男女之间的那点“意思”，常常是从“不好意思”开始，到“真没意思”结束。</p>
+<p>2、不要憎恨你的敌人，那会影响你的判断力。</p>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[世间所有的相遇，都是久别重逢]]></title>
@@ -51,5 +101,22 @@
         <link href="http://blog.801314.top/post/first/">
         </link>
         <updated>2020-05-16T14:44:08.000Z</updated>
+        <summary type="html"><![CDATA[<p>整了很久终于搞定了，之后可以作为个人博客发布内容了😀</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>整了很久终于搞定了，之后可以作为个人博客发布内容了😀</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Hello Gridea]]></title>
+        <id>http://blog.801314.top/post/hello-gridea/</id>
+        <link href="http://blog.801314.top/post/hello-gridea/">
+        </link>
+        <updated>2018-12-11T16:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+]]></content>
     </entry>
 </feed>
