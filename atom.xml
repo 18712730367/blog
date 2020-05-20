@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://blog.801314.top</id>
     <title>黑白杂色</title>
-    <updated>2020-05-20T01:40:08.154Z</updated>
+    <updated>2020-05-20T02:16:11.129Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://blog.801314.top"/>
     <link rel="self" href="http://blog.801314.top/atom.xml"/>
@@ -11,11 +11,26 @@
     <icon>http://blog.801314.top/favicon.ico</icon>
     <rights>All rights reserved 2020, 黑白杂色</rights>
     <entry>
+        <title type="html"><![CDATA[资深架构师成长路线 -- 分布式扩展到微服务架构]]></title>
+        <id>http://blog.801314.top/post/jiagoushi-fenbushi/</id>
+        <link href="http://blog.801314.top/post/jiagoushi-fenbushi/">
+        </link>
+        <updated>2020-05-20T01:42:43.000Z</updated>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[资深架构师成长路线 -- 高效存储让项目性能起飞]]></title>
         <id>http://blog.801314.top/post/jiagoushi-gaoxiao/</id>
         <link href="http://blog.801314.top/post/jiagoushi-gaoxiao/">
         </link>
         <updated>2020-05-19T09:43:55.000Z</updated>
+        <summary type="html"><![CDATA[<h2 id="1-redis">1、Redis</h2>
+<h3 id="5分钟搞定linux下redis安装">5分钟搞定Linux下Redis安装</h3>
+<h3 id="stringlisthashsetzset类型使用场景">String，List，Hash，Set，Zset类型使用场景</h3>
+]]></summary>
+        <content type="html"><![CDATA[<h2 id="1-redis">1、Redis</h2>
+<h3 id="5分钟搞定linux下redis安装">5分钟搞定Linux下Redis安装</h3>
+<h3 id="stringlisthashsetzset类型使用场景">String，List，Hash，Set，Zset类型使用场景</h3>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[资深架构师成长路线 -- 性能直线提升架构技术]]></title>
@@ -43,18 +58,10 @@
         <summary type="html"><![CDATA[<h2 id="1-六大原则">1、六大原则</h2>
 <h3 id="单一职责原则">单一职责原则</h3>
 <h3 id="开闭原则">开闭原则</h3>
-<h3 id="里氏替换原则">里氏替换原则</h3>
-<h3 id="依赖倒置原则">依赖倒置原则</h3>
-<h3 id="接口隔离原则">接口隔离原则</h3>
-<h3 id="迪米特法则">迪米特法则</h3>
 ]]></summary>
         <content type="html"><![CDATA[<h2 id="1-六大原则">1、六大原则</h2>
 <h3 id="单一职责原则">单一职责原则</h3>
 <h3 id="开闭原则">开闭原则</h3>
-<h3 id="里氏替换原则">里氏替换原则</h3>
-<h3 id="依赖倒置原则">依赖倒置原则</h3>
-<h3 id="接口隔离原则">接口隔离原则</h3>
-<h3 id="迪米特法则">迪米特法则</h3>
 ]]></content>
     </entry>
     <entry>
