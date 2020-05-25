@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+<title>Java 基础篇 - 黑白杂色</title>
+<meta name="description" content="没有绝对的纯，黑白也是杂色">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type='text/css' rel='stylesheet' href='http://blog.801314.top/styles/main.css' media='screen' />
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css">
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/jquery.js'></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+  <div class="layout theme-dark">
+    <div class="layout-header">
+
+	<div class="layout-header-main">
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+
+					<div class="navbar">
+
+						<div class="logo">
+							<a href="http://blog.801314.top">
+								<img class="logo"
+									src="http://blog.801314.top/media/images/site_avatar.png?v=1590378992061"
+									alt="">
+							</a>
+						</div>
+
+						<div class="menu d-md-inline-block d-none">
+							<ul class="layout-navigation-list">
+								
+								<li class="layout-navigation-item"><a title="主页"
+										href="/">主页</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="历史文章"
+										href="/archives">历史文章</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="文章分类"
+										href="/tags">文章分类</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="联系我"
+										href="http://blog.801314.top/post/zuo-zhe">联系我</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="item d-md-inline-block d-none">
+							<div class="search-icon">
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</div>
+						</div>
+
+
+
+						<div class="d-md-inline-block d-none">
+							<div class="search-lightbox">
+								<div class="search-body">
+
+									<form id="gridea-search-form" data-update="1590378992061" action="/search/" class="search-form">
+										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
+										<button type="submit" class="submit" aria-label="Submit">
+											<i class="fa fa-search" aria-hidden="true"></i>
+										</button>
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="nav d-md-none d-inline-block">
+							<div class="trigger">
+								<i class="fa fa-bars layout-btn-toggle" aria-hidden="true"></i>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+
+
+
+		</div>
+	</div>
+
+</div>
+    <div class="layout-collapse d-md-none">
+	<div class="layout-collapse-main">
+		<ul class="layout-collapse-list">
+			
+			<li class="layout-collapse-item"><a title="主页" href="/">主页</a></li>
+			
+			<li class="layout-collapse-item"><a title="历史文章" href="/archives">历史文章</a></li>
+			
+			<li class="layout-collapse-item"><a title="文章分类" href="/tags">文章分类</a></li>
+			
+			<li class="layout-collapse-item"><a title="联系我" href="http://blog.801314.top/post/zuo-zhe">联系我</a></li>
+			
+
+		</ul>
+	</div>
+</div>
+
+    <div class="layout-content">
+      <div class="layout-content-main">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-12 col-lg-9">
+              <div class="layout-post">
+                <div class="layout-post-body">
+                  <div class="row">
+
+                    <div class="col-12 col-lg-10">
+                      <div class="layout-post-main m-right m-md-right">
+                        <div class="layout-post-header">
+                          <h1 class="layout-post-title">Java 基础篇</h1>
+                          <div class="layout-post-meta">
+                            <div class="item">
+                               <a href="http://blog.801314.top/tag/jATL1hNB6/" class="post--keyword"
+                                data-title="面试-java基础" data-type="post_tag" data-term-id="39">面试-java基础</a>
+                              
+                            </div>
+                            <div class="item">
+                              <span>2020-05-21</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="layout-post-content">
+                          <div class="layout-post-item">
+                            
+                            <h2 id="让程序性能优异的并发利器">让程序性能优异的并发利器</h2>
+<h3 id="线程池">线程池</h3>
+<h4 id="创建参数对工作机制对影响">创建参数对工作机制对影响</h4>
+<!-- more -->
+<p>线程池构造函数：<br>
+<code>public ThreadPoolExecutor(int corePoolSize,int maximumPoolSize,long keepAliveTime,TimeUnit unit,BlockingQueue&lt;Runnable&gt; workQueue,ThreadFactory threadFactory,RejectedExecutionHandler handler)</code><br>
+参数含义：</p>
+<ul>
+<li>corePoolSize<br>
+线程池中的核心线程数，当提交一个任务时，线程池创建一个新线程执行任务，直到当前线程数等于corePoolSize；<br>
+如果当前线程数=corePoolSize，继续提交的任务会被保存到阻塞队列中，等待被执行；<br>
+如果执行了线程池的    <code>prestartAllCoreThreads()</code>方法，线程池会<strong>提前创建并启动</strong>所有核心线程。</li>
+<li>maximumPoolSize<br>
+线程池允许的最大线程数。<br>
+如果当前阻塞队列满了，且继续提交任务，则创建新的线程执行任务，前提是当前线程数小于 maximumPoolSize;</li>
+<li>keepAliveTime<br>
+<strong>非核心线程</strong>空闲时的存活时间，当没有任务执行时，<strong>非核心线程</strong>继续存活的时间。<br>
+默认情况下，该参数只在线程数大于corePoolSize时才有用。</li>
+<li>TimeUnit<br>
+keepAliveTIme的时间单位。</li>
+<li>workQueue<br>
+workQueue必须是BlockingQueue阻塞队列。<br>
+当线程池中的线程数超过他的corePoolSize的时候，线程会进入阻塞队列进行阻塞等待。通过workQueue，线程池实现了阻塞功能。</li>
+</ul>
+<blockquote>
+<p>workQueue<br>
+用于保持等待执行任务的的任务阻塞队列，尽量使用有界队列，因为无界队列会对线程池有影响：<br>
+1、当线程池中的线程数达到corePoolSize后，新任务将在无界队列中等待，因为线程池中的线程数不会超过corePoolSize；<br>
+2、使用无界队列时，maximumPoolSize和keepAliveTime将是无效参数<br>
+3、使用无界queue可能会耗尽系统资源，有界队列则有助于防止资源耗尽，同时即使使用有界队列，也要控制队列的大小在一个合适的范围。<br>
+所以一般使用 ArrayBlockingQueue，LinkedBlockingQueue，SynchronousQueue，PriorityBlockingQueue</p>
+</blockquote>
+<ul>
+<li>threadFactory<br>
+创建线程的工厂。<br>
+通过自定义的线程工厂，可以给每个新建的线程设置一个具有识别度的线程名，当然还可以更加自由的对线程做更多的设置，比如设置所有的线程为守护线程。<br>
+Exexutors 静态工厂里默认的threadFactory，线程的命名规则是“pool-数字-thread-数字”</li>
+<li>RejectedExecutionHandler<br>
+线程池的饱和策略，当阻塞队列满了，且没有空闲的工作线程，即当前线程数已经达到最大线程数，如果继续提交任务，必须采取一种策略处理该任务。</li>
+</ul>
+<blockquote>
+<p>线程池提供了4中策略：<br>
+1、AbortPolicy：直接抛出异常，默认策略<br>
+2、CallerRunsPolicy: 用调用者所在的线程来执行任务<br>
+3、DiscardOlderestPolicy： 丢弃阻塞队列中靠最前的任务，并执行当前任务<br>
+4、DiscardPolicy: 直接丢弃任务<br>
+也可以根据应用场景实现 RejectedExecutionHandler接口，自定义饱和策略，如记录日志活持久化存储不能处理的任务。</p>
+</blockquote>
+<h4 id="合理配置线程池">合理配置线程池</h4>
+<p>首先分析任务特性：<br>
+* 任务的性质：CPU密集型，IO密集型和混合型任务<br>
+* 任务的优先级：高，中，低<br>
+* 任务的执行时间：长，中，短<br>
+* 任务的依赖性：是否依赖其他系统资源，如数据库链接<br>
+性质不同的任务可以用不同规模的线程池分开处理</p>
+<p>CPU 密集型任务应配置尽可能小的线程，如配置Ncpu+1个线程的线程池。<br>
+IO密集型任务线程并不是一直在执行任务，则应配置尽可能多的线程，如 2*Ncpu。<br>
+混合型的任务，如果可以拆分，将其拆分为一个CPU密集型任务和一个IO密集型任务，只要这两个任务执行的时间相差不是太大，那么分解后执行的吞吐量将高于串行执行的吞吐量。如果这两个任务执行时间相差太大，则没必要进行分解。<br>
+可以通过<code>Runtime.getRuntime().availableProcessors()</code>方法获得当前设备的CPU个数。</p>
+<h3 id="概述-concurrenthashmap">概述 ConcurrentHashMap</h3>
+<h4 id="基本概述">基本概述</h4>
+<p>ConcurrentHahsMap 是线程安全的Map，1.7 和 1.8 中实现方式不同</p>
+<ul>
+<li>1.7<br>
+采用分段锁的机制，实现并发的更新操作，底层采用数组+链表的存储结构，包括两个核心静态内部类 Segment 和 HashEntry。<br>
+1、segment继承ReentrantLock（重入锁）用来充当锁的角色，每个Segemnt 对象守护每个散列映射表的若干个锁。<br>
+2、HashEntry 用来风中映射表的键值对<br>
+3、每个桶是由若干个HashEntry 对象链接起来的链表</li>
+<li>1.8<br>
+采用 Node+CAS+Synchronized 来保证并发安全。取消类Segment，直接用table数组存储键值对；当HashEntry对象组成对链表长度超过 TREEIFY_ THRESHOLD 时，链表转换为红黑树，提升性能。底层变更为数组 + 链表 + 红黑树。<br>
+1、重要对常量：<br>
+<code>private transient volatile int sizeCtl;</code><br>
+当为负数时，-1表示正在初始化，-N表示 N -1 个线程正在进行扩容；<br>
+当为 0 时，表示 table 还没有初始化；<br>
+当为其他正数时，表示初始化或者下一洗进行扩容的大小。<br>
+2、 数据结构：<br>
+Node时存储结构的基本单元，实现了Map中的Entry接口，用于存储数据；<br>
+TreeNode继承Node，但是数据结构换成来二叉树结构，是红黑树的存储结构，用于红黑树中存储数据。<br>
+3、存储对象时（put（） 方法）<br>
+1、如果没有初始化，就调用initTable（）方法来进行初始化；<br>
+2、如果没有 hash 冲突就直接 CAS 无锁插入；<br>
+3、如果需要扩容，就先进行扩容；<br>
+4、如果哦存在hash冲突，就枷锁来保证线程安全，两种情况：一种时链表形式就直接遍历到尾端插入，一种是红黑树就按照红黑树结构插入；<br>
+5、如果该链表的数量大雨阈值8，就要先转换成红黑树的结构<br>
+6、如果添加成功就调用 addCount（）方法统计size，并坚持是否需要扩容。<br>
+4、扩容方法 transfer（）<br>
+默认容量为16，扩容是，容量变为原来的两倍<br>
+helpTransfer（）： 调用多个工作线程一起帮助进行扩容，效率更高<br>
+5、获取对象时（get（）方法）<br>
+1、计算hash值，定位到该table索引位置，如果是首节点符合就返回；<br>
+2、如果遇到扩容时，会标记正在扩容结点 ForwardingNode.find() 方法，查找该结点，匹配就返回；<br>
+3、以上都不符合的话，就往下遍历结点，匹配就返回，否则最后就返回 null</li>
+</ul>
+<h3 id="为什么hashmap18-不直接使用红黑树而还要保留链表">为什么hashmap1.8 不直接使用红黑树而还要保留链表</h3>
+<p>因为插入时红黑树需要进行左旋，右旋操作，而单链表不需要，在数量较少时，红黑树并没有表现出比链表更好的查询效率，而且在占用空间上，红黑树的节点比链表的节点更大，时链表的两倍。</p>
+<h3 id="为什么大于8个的时候才转换红黑树">为什么大于8个的时候才转换红黑树</h3>
+<p>1、 按照JDK源码的解释：<br>
+TreeNodes占用空间是普通Nodes的两倍，所以只有当bin包含足够多的节点时才会转成TreeNodes，而是否足够多就是由 TREEIFY_THRESHOLD的值决定的。当bin中节点数变少时，又会转成普通的bin。TREEIFY_THRESHOLD的值是这个空间和时间的权衡。<br>
+当hashCode离散性很好的时候，树形bin用到的概率非常小，因为数据均匀分布在每个bin中，几乎不会有bin中链表长度会达到阈值。<br>
+但是在随机hahsCode下，离散性可能会变差，然而JDK又不能阻止用户实现这种不好的hash算法，因此就可能导致不均匀的数据分布。<br>
+不过理想情况下随机 hashCode 算法下所以bin中节点的分布频率会遵循泊松分布，一个bin中链表长度达到8个元素的概率为 0.00000006，几乎是不可能时间。所以，之所以选择8，不是拍拍屁股决定的，而是根据概率统计决定的。<br>
+2、网上的说法：<br>
+红黑树的平均查找长度是 log(n), 如果长度为8，平均查找长度为 log(8)=3，链表的平均查找长度为n/2，当长度为8是，平均查找长度为8/2=4，这才有转换成树的必要；链表长度如果小于等于6，6/2=3，而log(6)=2.6, 虽然速度也很快，但是转化为树结构和生成树的时间并不会太短。</p>
+<h3 id="概述volatile">概述volatile</h3>
+<p>volatile 关键字的主要作用：<br>
+多线程主要围绕<strong>可见性和原子性</strong>两个特性而展开，使用volatile 关键字修饰的变量，保证了其在多线程之间的可见性，即每次读取到volatile变量，一定是最新的数据。但是<strong>volatile不能保证操作的原子性</strong>，对任意单个volatile变量的读/写具有原子性，但类似++这种复合操作不具有原子性。</p>
+<p>代码底层在执行时为了获取更好的性能会对指令进行重排序，多线程下可能会出行一些意想不到的问题。使用volatile则会禁止重排序，但是会降低代码的执行效率。<br>
+同时在内存语义上，当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量值刷新到主内存，当读一个volatile变量时，JMM会把该线程对应的本地内存置为无效。线程接下来将从主内存中读取共享变量。<br>
+在java中，对与volatile修饰的变量，编译器在生成字节码时，会在指令序列中插入内存屏障来禁止特定类型的处理器重排序问题、强制刷新和读取。<br>
+在具体实现上，volatile关键字修饰的变量会存在一个“lock：”的前缀。它不是一种内存屏障，但是它能完成类似内存屏障的功能，lock会对CPU总线和高速缓存加锁，可以理解为CPU指令级的一种锁。<br>
+同时该指令会将当前处理器缓存行的数据直接写回到系统内存中，且这个写回内存的操作会使在其他CPU里缓存了该地址的数据无效。</p>
+<h3 id="概述aqs">概述AQS</h3>
+<p>AQS是用来构建锁或者其他同步组件的基础框架，比如ReentrantLock、ReentrantReadWriteLock 和 CountDownLatch 就是基于AQS实现的。<br>
+它使用了一个int成员变量来表示同步状态，通过内置的FIFO队列来完成资源获取线程的排队工作。踏实CLH队列锁的一种变体实现。它可以实现2种同步方式：独占式，共享式。<br>
+AQS的主要使用方式式继承，子类通过继承AQS并实现它的抽象方法来管理同步状态，同步器的设计基于模版方法模式，所以如果要实现我们自己的同步工具类就需要覆盖其中几个可以重写的方法：tryAcquire，tryReleaseShared 等。<br>
+这样设计的目的是同步组件（比如锁）是面向使用者的，它定义来使用者于同步组件交互的接口（比如可以允许两个线程并行访问），隐藏来实现细节；同步器面向的是锁的实现者，它简化了锁的实现方式，屏蔽了同步状态管理、线程的排队、等待与唤醒等底层操作。这样可以很好的隔离使用者和实现者所需要关注的领域。<br>
+在内部，AQS维护一个共享资源state，通过内置的FIFO来完成获取资源线程的排队工作。该队列由一个一个的Node节点组成，每个Node节点维护一个prev引用和next引用，分别指向自己的前驱和后继节点，构成一个双端双向链表。<br>
+同时与Condition相关的等待队列，节点类型也是Node，构成一个单向链表。</p>
+<h3 id="synchronized-的实现原理">synchronized 的实现原理</h3>
+<p>synchronized 在JVM里的实现都是基于进入和退出的Monitor对象来实现方法同步和代码块同步，虽然具体实现细节不一样，但是都可以通过成对的 MonitorEnter 和 MonitorExit 指令来实现。<br>
+对同步块，MonitorEnter指令插入在同步代码块的开始位置，当代码执行到该指令时，将会尝试获取该对象Monitor到所有权，即尝试获得该对象的锁，而monitorExit指令则插入在方法结束处和异常处，JVM保证每个MonitorEnter必须有对应的MonitorExit。<br>
+对同步方法，从同步方法反编译对结果来看，方法对同步并没有通过指令monitorEnter和monitoerExit来实现，相对于普通方法，其常量池中多来 ACC_SYNCHRONIZED 标示符。<br>
+JVM就是根据该标示符来实现方法的同步的： 当方法被调用时，调用指令将会坚持方法的 ACC_SYNCHRONIZED 访问标志是否被设置，如果设置了，执行线程将先获取monitor，获取成功之后才能执行方法体，方法执行完后在释放monitor。在方法执行期间，其他任何线程都无法在获得同一个monitor对象。<br>
+synchronized使用的锁是存放在Java对象头里面，具体位置是对象头里面的MarkWord，MarkWord 里默认数据是存储对象的HashCode 等信息，但是会随着对象的运行改变而发生变化，不同的锁状态对应着不同的记录存储方式。在具体优化上，从1.6开始引入了偏向锁、自旋锁等机制提升性能。</p>
+<h3 id="什么是cas操作缺点是什么">什么是CAS操作，缺点是什么？</h3>
+<p>CAS的基本思路是：如果这个地址上的值和期望的值相等，则给其赋予新值，否则不做任何事，但是要返回原值是多少。每个CAS操作过程都包含三个运算符：一个内存地址V,  一个期望的值A 和 一个新值B，操作的时候如果这个地址上存放的值等于这个期望的值A，则将地址上的值赋为新值B，否则不做任何操作。</p>
+<h4 id="cas-缺点">CAS 缺点：</h4>
+<ol>
+<li>
+<p>ABA问题：<br>
+一个线程one从内存位置V中取出A，这时候另一个线程two也从内存中取出A，并且two进行了一些操作变成了B，最终又变回A，然后two又将V位置的数据变成A，这时候线程one进行CAS操作发现内存中仍然是A，然后one操作成功。尽管线程one的CAS操作成功，但可能存在潜在但问题。从Java1.5开始，JDK的atomic包里提供了一个类的AtomicStampedReference来解决ABA问题。</p>
+</li>
+<li>
+<p>循环时间长，开销大：<br>
+对于资源竞争严重（线程冲突严重）的情况，CAS自旋的概率会比较大，从而浪费更多的CPU资源，效率低于synchronized。</p>
+</li>
+<li>
+<p>只能保证一个共享变量的原子操作：<br>
+当对一个共享变量执行操作时，我们可以使用循环CAS的方式来保证原子操作，但是对多个共享变量操作时，循环CAS就无法保证操作的原子性，这个时间就可以用锁。</p>
+</li>
+</ol>
+
+                          </div>
+                        </div>
+                        <div class="layout-post-social">
+                          <div class="item reader">
+                            <div id="/post/mianshi-java-jichu/" class="leancloud-visitors view"
+                              data-flag-title="Java 基础篇">
+                              <span class="post-meta-item-text">阅读 </span>
+                              <span class="leancloud-visitors-count"></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="layout-post-navigation">
+                          <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-8 col-md-9">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="http://blog.801314.top/post/dazhaimen/" class="title">
+                                      <h4>《大宅门》里白景琦的两封遗书</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner d-none d-sm-block">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2020-05-21</div>
+                                </div>
+                              </div>
+                              <div class="card-thumb col-4 col-md-3">
+                                <div class="thumb">
+                                  <a href="http://blog.801314.top/post/dazhaimen/"
+                                    style="background-image: url('http://blog.801314.top/post-images/dazhaimen.jpg');"></a>
+                                </div>
+                              </div>
+                              
+                            </div>
+                            
+                          </div>
+                        </div>
+
+                        <div class="layout-comments"></div>
+                        
+                        <script type="text/javascript" src='http://blog.801314.top/media/scripts/zan.js'></script>
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/av-min.js'></script>
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/Valine.min.js'></script>
+
+<script>
+  var valine = new Valine();
+  valine.init({
+    el: '.layout-comments',
+    appId: 'zF1TA09DTcGGHk6VGTJsez35-gzGzoHsz',
+    appKey: '8agqkoocVd5mVgPbpjNqTKYx',
+    notify: false,
+    verify: false,
+    visitor: true,
+    avatar: 'mp',
+    placeholder: '加入讨论...'
+  })
+</script>
+                        
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2 d-none d-lg-block">
+                      <div class="layout-post-sidebar">
+                        <div class="layout-sidebar-item">
+                          <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E8%AE%A9%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%BC%82%E7%9A%84%E5%B9%B6%E5%8F%91%E5%88%A9%E5%99%A8">让程序性能优异的并发利器</a>
+<ul>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0">线程池</a>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E5%8F%82%E6%95%B0%E5%AF%B9%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%E5%AF%B9%E5%BD%B1%E5%93%8D">创建参数对工作机制对影响</a></li>
+<li><a href="#%E5%90%88%E7%90%86%E9%85%8D%E7%BD%AE%E7%BA%BF%E7%A8%8B%E6%B1%A0">合理配置线程池</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A6%82%E8%BF%B0-concurrenthashmap">概述 ConcurrentHashMap</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E8%BF%B0">基本概述</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88hashmap18-%E4%B8%8D%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8%E7%BA%A2%E9%BB%91%E6%A0%91%E8%80%8C%E8%BF%98%E8%A6%81%E4%BF%9D%E7%95%99%E9%93%BE%E8%A1%A8">为什么hashmap1.8 不直接使用红黑树而还要保留链表</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%A4%A7%E4%BA%8E8%E4%B8%AA%E7%9A%84%E6%97%B6%E5%80%99%E6%89%8D%E8%BD%AC%E6%8D%A2%E7%BA%A2%E9%BB%91%E6%A0%91">为什么大于8个的时候才转换红黑树</a></li>
+<li><a href="#%E6%A6%82%E8%BF%B0volatile">概述volatile</a></li>
+<li><a href="#%E6%A6%82%E8%BF%B0aqs">概述AQS</a></li>
+<li><a href="#synchronized-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86">synchronized 的实现原理</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AFcas%E6%93%8D%E4%BD%9C%E7%BC%BA%E7%82%B9%E6%98%AF%E4%BB%80%E4%B9%88">什么是CAS操作，缺点是什么？</a>
+<ul>
+<li><a href="#cas-%E7%BC%BA%E7%82%B9">CAS 缺点：</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-totop d-none"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+
+    	<div class="layout-footer">
+
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+					<div class="footer">
+						<div class="row">
+							<div class="col-12 col-md-9">
+								<div class="footer-copy">
+									
+									<span>© 2020.5.16 </span>
+									<a href="http://blog.801314.top" title="黑白杂色">黑白杂色</a>
+									<span class="px-2">⋅</span>
+									
+									Powered by <a href="https://github.com/getgridea/gridea" target="_blank">blackWhite</a>
+									<div class="footer-icp d-none d-sm-inline-block">
+										<span class="px-2">⋅</span>
+										
+										<a href="http://www.beian.miit.gov.cn" target="_blank">没有绝对的纯，黑白也是杂色 </a>
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 d-none d-md-block">
+								<div class="footer-links">
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="807727909" target="_blank">
+											<i class="fa fa-qq" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="https://weibo.com/p/1005053905393397/home?from=page_100505&amp;mod=TAB&amp;is_all=1#place" target="_blank">
+											<i class="fa fa-weibo" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="yue142556" target="_blank">
+											<i class="fa fa-weixin" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript" src='http://blog.801314.top/media/scripts/main.js'></script>
+	
+
+  </div>
+</body>
+
+</html>
