@@ -33,7 +33,7 @@
 						<div class="logo">
 							<a href="http://blog.801314.top">
 								<img class="logo"
-									src="http://blog.801314.top/media/images/site_avatar.png?v=1590488096350"
+									src="http://blog.801314.top/media/images/site_avatar.png?v=1590658645138"
 									alt="">
 							</a>
 						</div>
@@ -72,7 +72,7 @@
 							<div class="search-lightbox">
 								<div class="search-body">
 
-									<form id="gridea-search-form" data-update="1590488096350" action="/search/" class="search-form">
+									<form id="gridea-search-form" data-update="1590658645138" action="/search/" class="search-form">
 										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
 										<button type="submit" class="submit" aria-label="Submit">
 											<i class="fa fa-search" aria-hidden="true"></i>
@@ -586,6 +586,169 @@ Stop The World机制，简称STW，主要指执行垃圾收集算法时，Java�
 <clinit>() 方法对于类或接口并不是必须的，如果一个类中没有静态语句块，也没有对变量的赋值操作，那么编译器可以不为这个类生成 <clinit>() 方法。<br>
 虚拟机会保证一个类的 <clinit>() 方法在多线程环境中被正确的加锁，同步，如果多个线程同时去初始化一个类，那么只会有一个线程去执行这个类的<clinit>（）方法，其他线程都需要阻塞等待直到活动线程执行<clinit>() 方法完毕。如果在一个类的<clinit>() 方法中有韩式很长的操作，就可能造成多个进程阻塞。所以类的初始化是线程安全的，项目中可以利用这点。</p>
 <h3 id="双亲委派模型">双亲委派模型</h3>
+<p><strong>对任意一个类，都需要由加载它的类加载器和这个类本身一起确立其在Java虚拟机中的唯一性。</strong><br>
+从Java虚拟机的角度来讲，只存在两种不同的类加载器：</p>
+<ul>
+<li>
+<p>启动类加载器（Bootstrap ClassLoader）<br>
+这个类加载器使用C++语言实现，是虚拟机的一部分。这个类将负责将存放在&lt;JAVA_HOME&gt;/lib 目录中的，或者被 -Xbootclasspath 参数所指定的路径中的，并且是虚拟机识别的（仅按照文件名识别，如 rt.jar，名字不符合的类库即使放在lib目录中也不会被加载）类库加载带虚拟机内存中。启动类加载器无法被Java程序直接引用，用户在编写自定义类加载器时，如果需要把加载请求委派给引导类加载器，那直接使用null代替就可以。</p>
+</li>
+<li>
+<p>其他类加载器<br>
+这些类加载器都由Java语言实现，独立于虚拟机外部，并且全部继承自抽象类 java.lang.ClassLoader</p>
+<ul>
+<li>扩展类加载器 （Extension ClassLoader)<br>
+这个加载器由 sun.misc.Launcher$ExtClassLoader 实现，它负责加载&lt;JAVA_HOME&gt;/lib/ext 目录中的，或者被 java.ext.dirs 系统变量所指定的路径中的所以类型，开发者可以直接使用扩展类加载器。</li>
+<li>应用程序类加载器 (Application ClassLoader)<br>
+这个类加载器由 sun.misc.Launcher$AppClassLoader 实现。由于这个类加载器是 ClassLoader 中的 getSystemClassLoader() 方法的返回值，所以一般也称它为系统类加载器。他负责加载用户类路径(ClassPath) 上所指定的类库，开发者可以直接使用这个类加载器，如果应用程序中没有自定义的类加载器，一般情况下这个就是程序中默认的类加载器。</li>
+</ul>
+</li>
+</ul>
+<p>我们的应用程序都是由这3种类加载器互相配合进行加载的，如果有必要，还可以加入自定义的类加载器。<br>
+双亲委派模型要求除了顶层的启动类加载器外，其余的类加载器都应该有自己的父类加载器。这里类加载器之间的父子关系一般不会以继承(Inheritance) 的关系来实现，而是都使用组合（omposition) 关系来复用父加载器的代码。</p>
+<p>使用双亲委派模型来组织类加载器之间的关系，一个显而易见的好处就是Java类随着它的类加载器一起将具备了一种带有优先级的层次关系。例如类 java.lang.Object, 它存放在rt.jar 之中，无论哪一个类加载器要加载这个类，最终都会委派给处于模型最顶端的启动类加载器进行加载，因此Object类在程序的各类加载器环境中都是同一个类。</p>
+<p>ClassLoader 中的 loadClass 方法中的代码逻辑就是双亲委派模型：<br>
+在自定义ClassLoader的子类的时候，我们常见的会有两种做法，一种是重写 loadClass 方法，另一种是重写 findClass方法 。其实这两种方法本质上长不大，毕竟loadClass 也会调用findClass， 但是从逻辑上讲我们最好不要直接修改 loadClass 的内部逻辑。我建议的做法是只在 findClass 里findClass 里重写自定义类的加载方法。</p>
+<p>loadClass这个方法是实现双亲委派模型逻辑的地方，擅自修改这个方法会导致模型被破坏，容易造成问题。因此我们最好是在双亲委派模型框架内进行小范围的改掉，不破坏原有的稳定结构。同时，也避免了自己重写 loadClass 方法的过程中鼻血重写双亲委托的重复代码，从代码的复用性来看，不直接修改这个方法始终是比较好的选择。</p>
+<p>但是Tomcat 中没有完全遵守双亲委派模型。</p>
+<h3 id="双亲委派模型的破坏">双亲委派模型的破坏</h3>
+<p>双亲委派模型很好的解决了各个类加载器的基础类的统一问题（越基础的类越由上层的加载器进行加载），基础类之所以称为“基础”，是因为他们总是作为被用户代码调用的API。如果基础类要调用用户的代码，那怎么办？</p>
+<p>比如JDBC是原生的JDBC中Driver驱动本身只是一个接口，并没有具体实现，具体的实现由不同数据库类型去实现的。</p>
+<p>例如，MySQL的mysql-connector.jar 中的Driver类具体实现的。原生的JDBC中的类是放在 rt.jar 包的，是由启动类加载器进行加载的，在JDBC中的Driver类中需要动态去加载不同数据库类型的Driver类，而mysql-connector.jar 中的Driver类是由独立厂商实现并部署在应用程序的ClassPath下的，那启动类加载器肯定是不能进行加载的，既然是自己编写的代码，那就需要由应用程序启动类去进行类加载。</p>
+<p>于是，这个时候就引入线程上下文类加载器（Thread Context ClassLoader）。有了这个东西，程序就可以把原本需要由启动类加载器进行加载的类，由应用程序类加载器去进行加载了。如果创建线程时还未设置，他将会从父线程中继承一个，如果在应用程序的全局范围内都没有设置过的话，那么这个类加载器默认就是应用程序类加载器。</p>
+<p>Java中所以设计SPI的加载动作基本上都是采用这种方式，例如 JNDI，JDBC，JCE，JAXB和JBI等。<br>
+双亲委派模型的“被破坏”是由于用户对程序动态性的追求而导致的，这里说说的“动态性”指的是当前一些非常“热门“的名词：代码热替换（HotSwap），模块热部署（HotDeplooyment）等等。</p>
+<h3 id="jvm常用工具">JVM常用工具</h3>
+<ul>
+<li>
+<p>jps<br>
+列出当前机器上正在运行的虚拟机进程，Jps从操作系统的临时目录上去找<br>
+* -q: 仅仅线上进程<br>
+* -m：输出主函数传入的参数，<br>
+* -l：输出应用程序主类完整package名称或jar完整名称<br>
+* -v：列出jvm参数，-Xms20m -Xmx20 是启动程序指定的JVM参数</p>
+</li>
+<li>
+<p>jstat<br>
+是用于见识虚拟机各种运行状态信息的命令行工具。它可以显示本地或者远程虚拟机进程中的类装载，内存，垃圾收集，JIT编译等运行数据，在没有GUI图像件，只提供了纯文本控制台环境的服务器上，它将是运行期定位虚拟机性能问题的首选工具。<br>
+假设需要每 250 毫秒查询一次进程 13616 垃圾收集状况，一共查询 10 次，<br>
+那命令应当是：jstat -gc 13616 250 10<br>
+常用参数：</p>
+<ul>
+<li>-class 类加载器</li>
+<li>-compiler JIT</li>
+<li>-gc GC堆状态</li>
+<li>-gccapacity 各区大小</li>
+<li>-gccause 最近一次GC统计和原因</li>
+<li>-gcnew 新区统计</li>
+<li>-gcnewcapacity 新区大小</li>
+<li>-gcold 老区统计</li>
+<li>-gcoldcapacity 老区大小</li>
+<li>-gcpermcapacity 永久区大小</li>
+<li>gcutil GC统计汇总</li>
+<li>printcompilation HotSpot编译统计</li>
+</ul>
+</li>
+<li>
+<p>jinfo<br>
+查看和修改虚拟机参数</p>
+<ul>
+<li>-sysprops 可以查看有 System.getProperties() 取得的参数</li>
+<li>-flag 未被显示指定的参数的系统默认值</li>
+<li>-flags 显示虚拟机的参数</li>
+</ul>
+</li>
+<li>
+<p>jmap<br>
+用于生产对转储快照（一般称为heapdump或dump文件）。jmap的作用并不仅仅是为了获取dump文件，它还可以查询finalize执行队列，java堆和永久带的详细信息，如空间使用率，当前用的是哪种收集器等。和info命令一样，jmap有不少功能在windows 平台下都是受限的，除了生成dump文件的-dump选项和用于查看每个类的实例，空间占用统计的 -histo选项在所有操作系统都提供之外，其余选项都只能在Linux、Solaris下使用。<br>
+jmap -dump:live,format=b,file=heap.bin <pid><br>
+Sun JDK 提供jhat（JVM heap Analysis Tool）命令与jmap搭配使用，来分析jamp 生成的对转储快照。</p>
+</li>
+<li>
+<p>jhat<br>
+jhat dump 文件名<br>
+屏幕显示 ”server is ready“的提示后，浏览器中访问 http://localhost:7000/ 就可以访问详情<br>
+使用jhat可以在服务器上生成堆转储文件分析（一般不推荐，比较占用服务器资源）</p>
+</li>
+<li>
+<p>jstack<br>
+Strack Trace Java， 命令用于生产虚拟机当前时刻的线程快照。线程快照就是当前虚拟机内每一条线程正在执行的方法堆栈的集合，生成线程快照的主要目的是定位线程出现长时间停顿的原因，如线程间死锁，死循环，请求外部资源导致的长时间等待等都是导致线程长时间停顿的常见原因。<br>
+在代码中可以用 java.lang.Thread 类的 getAllStrackTraces() 方法用于获取虚拟机中所有线程的 StackTraceElement 对象。使用这个方法可以通过简单的几行代码就完成 jstack 的大部分功能，在实际项目中不妨调用这个方法做一个管理员页面，可以随时使用浏览器来查看线程堆栈。</p>
+</li>
+</ul>
+<h3 id="项目内存或者cpu占用过高如何排查">项目内存或者CPU占用过高如何排查</h3>
+<ol>
+<li>
+<p>针对CPU的问题：</p>
+<ol>
+<li>查看问题进程，得到进程PID： top -c</li>
+<li>查看进程里的线程明细，并手动记下CPU异常的线程PID：top -p PID -H</li>
+<li>使用jdk提供的jstack命令打印出项目堆栈：jstack pid &gt; dump.log</li>
+</ol>
+</li>
+<li>
+<p>针对内存的问题：</p>
+<ol>
+<li>查看内存中的存活对象统计，找出业务相关的类名： jmap -histo:live PID &gt; xxx.log</li>
+<li>通过简单的捅进还是没办法定位问题的话，就输出内存明细来分析。这个命令会将内存里的所有信息都输出，输出的文件大小和内存大小基本一致。而且会导致应用暂时挂起，所有谨慎使用：jmap -dump:live,format-b,file=xxx.hprof PID</li>
+<li>最后对dump出来的文件进行分析。文件大小不是很大的话，使用jdk自带的jhat命令即可：<br>
+<code>jhat -J -mx2G -port 7170</code></li>
+<li>dump 文件太大的话，可以使用 jprofiler 工具来分析。</li>
+</ol>
+</li>
+<li>
+<p>需要分析GC的情况，可以使用一下命令：<br>
+<code>jstat -gc PID</code></p>
+</li>
+</ol>
+<h2 id="框架源码crud和高级程序员的分水岭">框架源码，CRUD和高级程序员的分水岭</h2>
+<h3 id="谈谈依赖注入和面向切面">谈谈依赖注入和面向切面</h3>
+<p>谈谈你对Spring框架的理解，谈谈Spring中的IOC和AOP概念<br>
+Spring 框架是一个开源而轻量级的框架，是一个IOC和AOP的容器，spring的核心就是控制反转（IOC）和面向切量编程（AOP）</p>
+<ul>
+<li>IOC<br>
+面向对象编程中的一种设计原则，用来降低代码之间的耦合度，使整个程序体系结构更加灵活，与此同时将类的创建和依赖关系卸载配置文件里，由配置文件注入，达到松耦合的效果。与此同时IOC也称为DI（依赖注入），依赖注入是一种开发模式；依赖注入提倡使用接口编程；依赖注入使得可以开发各个组件，然后根据组件之间的依赖关系注入组装，<br>
+所谓依赖，从程序的角度看，就是比如A要调用B的方法，那么A就依赖于B，返回A要用到B，则A依赖于B。所谓倒置，如果不倒置，因为A必须要用到B，所以要有B才可以调用B的方法。不倒置的话A就需要主动获取B的实例：B b = new B(); 这就是最简单的获取B实例的方法（各种设计模式也可以帮忙去获得B的实例，比如工厂，Locator等），然后就可以调用b对象了。所以不倒置，就需要A主动获取B，才能使用B。倒置的话，就是A要调用B的话，A并不需要主动获取B，而是由其他人自动将B送上门。</li>
+<li>AOP<br>
+面向切面编程将安全，事物等程序逻辑相对独立的功能抽取出来，利用Spring的配置文件将这些功能插进去，实现了按照切面编程，提高了复用性；最主要的作用: 可以再不锈钢源代码的情况下，给目标方法动态添加功能。<br>
+面向切面编程的目标就是分离关注点。什么是关注点呢？就是你要做的事，就是关注点。<br>
+AOP的好处就是你只需要干你的正事，其他事情交给别人帮你干。<br>
+从Spring的角度来看，AOP最大的用途就在于提供了事务管理能力。事务管理就是一个关注点，你的正事是去访问数据库，而你不太想管事务，所以，Spring在你访问数据库之前，自动帮你开启事务，当你访问数据库结束后，自动帮你提交、回滚事务。</li>
+</ul>
+<p>Spring优点</p>
+<ul>
+<li>低侵入式设计，独立于各种应用服务器</li>
+<li>依赖注入的特点将组件关系透明化，降低耦合度</li>
+<li>与第三方框架具有良好的整合效果</li>
+</ul>
+<h3 id="spring框架中bean实例化的流程">Spring框架中bean实例化的流程</h3>
+<h3 id="spring-bean的生命周期">Spring Bean的生命周期</h3>
+<h3 id="spring在bean创建过程中是如何解决循环依赖的">Spring在Bean创建过程中是如何解决循环依赖的</h3>
+<p>循环依赖只会存在单例实例中，多例循环依赖直接报错。<br>
+A类实例化后，把实例放map中，A类中有一个B类属性，A类实例化要进行IOC依赖注入，这时候B类需要实例化，B类实例化跟A类一样，实例化后放入map容器中。B类中有一个A类属性，接着B类的IOC过程，又去实例化A类，这时候实例化A类过程中从map容器发现A类已经在容器中了，就直接返回了A的实例，依赖注入到B类中A属性中，B类IOC完成后，B实例化就完全完成了，就返回给A类的IOC过程。这就是循环依赖的解决。</p>
+<h3 id="aop实现流程">AOP实现流程</h3>
+<ol>
+<li>aop:config 自定义标签解析</li>
+<li>自定义标签解析时会执行到aop入口类中</li>
+<li>Bean实例化过程中会执行到aop入口类中</li>
+<li>在aop入口类中，判断当前正在实例化的类是否在pointcut中，pointcut可以理解为一个模糊匹配，是一个joinpoint的集合</li>
+<li>如果当前正在实例化的类在pointcout中，则返回该bean的代理类，同时把所有配置的advice封装成 MethodInterceptor对象加入到容器中，封装成一个过滤器链</li>
+<li>代理对象调用，jdk动态代理会调用invocationHandler中，cglib型代理调到 MethodInterceptor的callback类中，然后在 invoke 方法中执行过滤器链。</li>
+</ol>
+<h3 id="spring框架中如何基于aop实现事务管理">Spring框架中如何基于AOP实现事务管理</h3>
+<p>事务管理，是一个切面。在aop环节中，其他环节都一样，事务管理就是由Spring提供的advice，既是TransactionInterceptor，它一样的会在过滤器链中被执行到，这个TransactionInterceptor 过滤器类是通过解析 <a href="tx:advice">tx:advice</a> 自定义标签得到的。</p>
+<h3 id="描述springmvc的整个访问或者调用流程">描述SpringMvc的整个访问或者调用流程</h3>
+<ol>
+<li>发起请求到前端控制器（DispatcherServlet)</li>
+<li>前端控制器请求HandlerMapping查找Handler（可以根据xml配置，注解查找），处理器映射器 HandlerMapping 向前端控制器返回Handler</li>
+<li>前端控制器调用处理器适配器去执行 Handler</li>
+<li>处理器适配器去执行Handler</li>
+<li>Handler 执行完成给适配器返回 ModelAndView，处理器适配器向前端控制器返回 ModelAndView(ModelAndView 是 springmvc 框架的一个底层对象，包括 model 和 view)</li>
+<li>前端控制器请求视图解析器去进行视图解析（根据逻辑视图名解析成真正的视图（jsp）），视图解析器向前端控制器返回 View</li>
+<li>前端控制器进行视图渲染（视图渲染将模型数据填充到request域）</li>
+<li>前端控制器向用户响应结果</li>
+</ol>
+<figure data-type="image" tabindex="2"><img src="http://blog.801314.top/post-images/1590658353054.jpg" alt="" loading="lazy"></figure>
 
                           </div>
                         </div>
@@ -774,6 +937,20 @@ Stop The World机制，简称STW，主要指执行垃圾收集算法时，Java�
 <li><a href="#%E8%A7%A3%E6%9E%90">解析</a></li>
 <li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96">初始化</a></li>
 <li><a href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B">双亲委派模型</a></li>
+<li><a href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%A0%B4%E5%9D%8F">双亲委派模型的破坏</a></li>
+<li><a href="#jvm%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7">JVM常用工具</a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E5%86%85%E5%AD%98%E6%88%96%E8%80%85cpu%E5%8D%A0%E7%94%A8%E8%BF%87%E9%AB%98%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5">项目内存或者CPU占用过高如何排查</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A1%86%E6%9E%B6%E6%BA%90%E7%A0%81crud%E5%92%8C%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E5%88%86%E6%B0%B4%E5%B2%AD">框架源码，CRUD和高级程序员的分水岭</a>
+<ul>
+<li><a href="#%E8%B0%88%E8%B0%88%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2">谈谈依赖注入和面向切面</a></li>
+<li><a href="#spring%E6%A1%86%E6%9E%B6%E4%B8%ADbean%E5%AE%9E%E4%BE%8B%E5%8C%96%E7%9A%84%E6%B5%81%E7%A8%8B">Spring框架中bean实例化的流程</a></li>
+<li><a href="#spring-bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">Spring Bean的生命周期</a></li>
+<li><a href="#spring%E5%9C%A8bean%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84">Spring在Bean创建过程中是如何解决循环依赖的</a></li>
+<li><a href="#aop%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B">AOP实现流程</a></li>
+<li><a href="#spring%E6%A1%86%E6%9E%B6%E4%B8%AD%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Eaop%E5%AE%9E%E7%8E%B0%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86">Spring框架中如何基于AOP实现事务管理</a></li>
+<li><a href="#%E6%8F%8F%E8%BF%B0springmvc%E7%9A%84%E6%95%B4%E4%B8%AA%E8%AE%BF%E9%97%AE%E6%88%96%E8%80%85%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B">描述SpringMvc的整个访问或者调用流程</a></li>
 </ul>
 </li>
 </ul>
