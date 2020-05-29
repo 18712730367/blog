@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-<title>First  - 黑白杂色</title>
+<title>Java 读取文件完整版 - 黑白杂色</title>
 <meta name="description" content="没有绝对的纯，黑白也是杂色">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -130,33 +130,211 @@
                     <div class="col-12 col-lg-10">
                       <div class="layout-post-main m-right m-md-right">
                         <div class="layout-post-header">
-                          <h1 class="layout-post-title">First </h1>
+                          <h1 class="layout-post-title">Java 读取文件完整版</h1>
                           <div class="layout-post-meta">
                             <div class="item">
-                               <a href="http://blog.801314.top/tag/NigFvG939/" class="post--keyword"
-                                data-title="个人" data-type="post_tag" data-term-id="39">个人</a>
                               
                             </div>
                             <div class="item">
-                              <span>2020-05-16</span>
+                              <span>2020-05-29</span>
                             </div>
                           </div>
                         </div>
                         <div class="layout-post-content">
                           <div class="layout-post-item">
                             
-                            <p class="with-img"><img src="http://blog.801314.top/post-images/first.jpg"
-                                class="attachment-full size-full wp-post-image" alt="First " /></p>
-                            
-                            <p>整了很久终于搞定了，之后可以作为个人博客发布内容了😀</p>
-<!-- more -->
+                            <pre><code>public class ReadFromFile {  
+    /** 
+     * 以字节为单位读取文件，常用于读二进制文件，如图片、声音、影像等文件。 
+     */  
+    public static void readFileByBytes(String fileName) {  
+        File file = new File(fileName);  
+        InputStream in = null;  
+        try {  
+            System.out.println(&quot;以字节为单位读取文件内容，一次读一个字节：&quot;);  
+            // 一次读一个字节  
+            in = new FileInputStream(file);  
+            int tempbyte;  
+            while ((tempbyte = in.read()) != -1) {  
+                System.out.write(tempbyte);  
+            }  
+            in.close();  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+            return;  
+        }  
+        try {  
+            System.out.println(&quot;以字节为单位读取文件内容，一次读多个字节：&quot;);  
+            // 一次读多个字节  
+            byte[] tempbytes = new byte[100];  
+            int byteread = 0;  
+            in = new FileInputStream(fileName);  
+            ReadFromFile.showAvailableBytes(in);  
+            // 读入多个字节到字节数组中，byteread为一次读入的字节数  
+            while ((byteread = in.read(tempbytes)) != -1) {  
+                System.out.write(tempbytes, 0, byteread);  
+            }  
+        } catch (Exception e1) {  
+            e1.printStackTrace();  
+        } finally {  
+            if (in != null) {  
+                try {  
+                    in.close();  
+                } catch (IOException e1) {  
+                }  
+            }  
+        }  
+    }  
+  
+    /** 
+     * 以字符为单位读取文件，常用于读文本，数字等类型的文件 
+     */  
+    public static void readFileByChars(String fileName) {  
+        File file = new File(fileName);  
+        Reader reader = null;  
+        try {  
+            System.out.println(&quot;以字符为单位读取文件内容，一次读一个字节：&quot;);  
+            // 一次读一个字符  
+            reader = new InputStreamReader(new FileInputStream(file));  
+            int tempchar;  
+            while ((tempchar = reader.read()) != -1) {  
+                // 对于windows下，\r\n这两个字符在一起时，表示一个换行。  
+                // 但如果这两个字符分开显示时，会换两次行。  
+                // 因此，屏蔽掉\r，或者屏蔽\n。否则，将会多出很多空行。  
+                if (((char) tempchar) != '\r') {  
+                    System.out.print((char) tempchar);  
+                }  
+            }  
+            reader.close();  
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        }  
+        try {  
+            System.out.println(&quot;以字符为单位读取文件内容，一次读多个字节：&quot;);  
+            // 一次读多个字符  
+            char[] tempchars = new char[30];  
+            int charread = 0;  
+            reader = new InputStreamReader(new FileInputStream(fileName));  
+            // 读入多个字符到字符数组中，charread为一次读取字符数  
+            while ((charread = reader.read(tempchars)) != -1) {  
+                // 同样屏蔽掉\r不显示  
+                if ((charread == tempchars.length)  
+                        &amp;&amp; (tempchars[tempchars.length - 1] != '\r')) {  
+                    System.out.print(tempchars);  
+                } else {  
+                    for (int i = 0; i &lt; charread; i++) {  
+                        if (tempchars[i] == '\r') {  
+                            continue;  
+                        } else {  
+                            System.out.print(tempchars[i]);  
+                        }  
+                    }  
+                }  
+            }  
+  
+        } catch (Exception e1) {  
+            e1.printStackTrace();  
+        } finally {  
+            if (reader != null) {  
+                try {  
+                    reader.close();  
+                } catch (IOException e1) {  
+                }  
+            }  
+        }  
+    }  
+  
+    /** 
+     * 以行为单位读取文件，常用于读面向行的格式化文件 
+     */  
+    public static void readFileByLines(String fileName) {  
+        File file = new File(fileName);  
+        BufferedReader reader = null;  
+        try {  
+            System.out.println(&quot;以行为单位读取文件内容，一次读一整行：&quot;);  
+            reader = new BufferedReader(new FileReader(file));  
+            String tempString = null;  
+            int line = 1;  
+            // 一次读入一行，直到读入null为文件结束  
+            while ((tempString = reader.readLine()) != null) {  
+                // 显示行号  
+                System.out.println(&quot;line &quot; + line + &quot;: &quot; + tempString);  
+                line++;  
+            }  
+            reader.close();  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        } finally {  
+            if (reader != null) {  
+                try {  
+                    reader.close();  
+                } catch (IOException e1) {  
+                }  
+            }  
+        }  
+    }  
+  
+    /** 
+     * 随机读取文件内容 
+     */  
+    public static void readFileByRandomAccess(String fileName) {  
+        RandomAccessFile randomFile = null;  
+        try {  
+            System.out.println(&quot;随机读取一段文件内容：&quot;);  
+            // 打开一个随机访问文件流，按只读方式  
+            randomFile = new RandomAccessFile(fileName, &quot;r&quot;);  
+            // 文件长度，字节数  
+            long fileLength = randomFile.length();  
+            // 读文件的起始位置  
+            int beginIndex = (fileLength &gt; 4) ? 4 : 0;  
+            // 将读文件的开始位置移到beginIndex位置。  
+            randomFile.seek(beginIndex);  
+            byte[] bytes = new byte[10];  
+            int byteread = 0;  
+            // 一次读10个字节，如果文件内容不足10个字节，则读剩下的字节。  
+            // 将一次读取的字节数赋给byteread  
+            while ((byteread = randomFile.read(bytes)) != -1) {  
+                System.out.write(bytes, 0, byteread);  
+            }  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        } finally {  
+            if (randomFile != null) {  
+                try {  
+                    randomFile.close();  
+                } catch (IOException e1) {  
+                }  
+            }  
+        }  
+    }  
+  
+    /** 
+     * 显示输入流中还剩的字节数 
+     */  
+    private static void showAvailableBytes(InputStream in) {  
+        try {  
+            System.out.println(&quot;当前字节输入流中的字节数为:&quot; + in.available());  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        }  
+    }  
+  
+    public static void main(String[] args) {  
+        String fileName = &quot;C:/temp/newTemp.txt&quot;;  
+        ReadFromFile.readFileByBytes(fileName);  
+        ReadFromFile.readFileByChars(fileName);  
+        ReadFromFile.readFileByLines(fileName);  
+        ReadFromFile.readFileByRandomAccess(fileName);  
+    }  
+}
+</code></pre>
 
                           </div>
                         </div>
                         <div class="layout-post-social">
                           <div class="item reader">
-                            <div id="/post/first/" class="leancloud-visitors view"
-                              data-flag-title="First ">
+                            <div id="/post/java-du-qu-wen-jian-wan-zheng-ban/" class="leancloud-visitors view"
+                              data-flag-title="Java 读取文件完整版">
                               <span class="post-meta-item-text">阅读 </span>
                               <span class="leancloud-visitors-count"></span>
                             </div>
@@ -168,64 +346,26 @@
                             
                             <div class="post-card row">
                               
-                              <div class="card-content col-8 col-md-9">
+                              <div class="card-content col-12">
                                 <div class="card-body">
                                   <div class="header">
-                                    <a href="http://blog.801314.top/post/meet/" class="title">
-                                      <h4>世间所有的相遇，都是久别重逢</h4>
+                                    <a href="http://blog.801314.top/post/suo-yin-de-zuo-yong/" class="title">
+                                      <h4>索引的作用</h4>
                                     </a>
                                   </div>
-                                  <div class="inner d-none d-sm-block">
+                                  <div class="inner">
                                     <div class="abstract">
                                       
                                     </div>
                                   </div>
                                 </div>
                                 <div class="card-footer">
-                                  <div class="item"><span>上一篇</span></div>
-                                  <div class="item">2020-05-17</div>
-                                </div>
-                              </div>
-                              <div class="card-thumb col-4 col-md-3">
-                                <div class="thumb">
-                                  <a href="http://blog.801314.top/post/meet/"
-                                    style="background-image: url('http://blog.801314.top/post-images/meet.jpg');"></a>
-                                </div>
-                              </div>
-                              
-                            </div>
-
-                            <div class="post-card row">
-                              
-                              <div class="card-content col-8 col-md-9">
-                                <div class="card-body">
-                                  <div class="header">
-                                    <a href="http://blog.801314.top/post/hello-gridea/" class="title">
-                                      <h4>Hello Gridea</h4>
-                                    </a>
-                                  </div>
-                                  <div class="inner d-none d-sm-block">
-                                    <div class="abstract">
-                                      <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-footer">
                                   <div class="item"><span>下一篇</span></div>
-                                  <div class="item">2018-12-12</div>
-                                </div>
-                              </div>
-                              <div class="card-thumb col-4 col-md-3">
-                                <div class="thumb">
-                                  <a href="http://blog.801314.top/post/hello-gridea/"
-                                    style="background-image: url('http://blog.801314.top/post-images/hello-gridea.png');"></a>
+                                  <div class="item">2020-05-25</div>
                                 </div>
                               </div>
                               
                             </div>
-
                             
                           </div>
                         </div>

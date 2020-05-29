@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://blog.801314.top</id>
     <title>黑白杂色</title>
-    <updated>2020-05-28T09:37:28.087Z</updated>
+    <updated>2020-05-29T03:11:18.996Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://blog.801314.top"/>
     <link rel="self" href="http://blog.801314.top/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>http://blog.801314.top/images/avatar.png</logo>
     <icon>http://blog.801314.top/favicon.ico</icon>
     <rights>All rights reserved 2020, 黑白杂色</rights>
+    <entry>
+        <title type="html"><![CDATA[Java 读取文件完整版]]></title>
+        <id>http://blog.801314.top/post/java-du-qu-wen-jian-wan-zheng-ban/</id>
+        <link href="http://blog.801314.top/post/java-du-qu-wen-jian-wan-zheng-ban/">
+        </link>
+        <updated>2020-05-29T03:10:01.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[索引的作用]]></title>
         <id>http://blog.801314.top/post/suo-yin-de-zuo-yong/</id>
@@ -59,21 +66,6 @@
         <content type="html"><![CDATA[<h2 id="1-分布式事务解决方案">1、分布式事务解决方案</h2>
 <h3 id="事务与锁">事务与锁</h3>
 <h3 id="标准分布式事务">标准分布式事务</h3>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[资深架构师成长路线 -- 分布式扩展到微服务架构]]></title>
-        <id>http://blog.801314.top/post/jiagoushi-fenbushi/</id>
-        <link href="http://blog.801314.top/post/jiagoushi-fenbushi/">
-        </link>
-        <updated>2020-05-20T01:42:43.000Z</updated>
-        <summary type="html"><![CDATA[<h2 id="1-从rpc开始">1、从RPC开始</h2>
-<h3 id="服务注册与发布">服务注册与发布</h3>
-<h3 id="动态代理">动态代理</h3>
-]]></summary>
-        <content type="html"><![CDATA[<h2 id="1-从rpc开始">1、从RPC开始</h2>
-<h3 id="服务注册与发布">服务注册与发布</h3>
-<h3 id="动态代理">动态代理</h3>
 ]]></content>
     </entry>
 </feed>
