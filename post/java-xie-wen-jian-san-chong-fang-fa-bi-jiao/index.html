@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-<title>《闻香识女人》经典台词 - 黑白杂色</title>
+<title>Java 写文件三种方法比较 - 黑白杂色</title>
 <meta name="description" content="没有绝对的纯，黑白也是杂色">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -130,45 +130,92 @@
                     <div class="col-12 col-lg-10">
                       <div class="layout-post-main m-right m-md-right">
                         <div class="layout-post-header">
-                          <h1 class="layout-post-title">《闻香识女人》经典台词</h1>
+                          <h1 class="layout-post-title">Java 写文件三种方法比较</h1>
                           <div class="layout-post-meta">
                             <div class="item">
-                               <a href="http://blog.801314.top/tag/EgFVhYqju/" class="post--keyword"
-                                data-title="电影台词" data-type="post_tag" data-term-id="39">电影台词</a>
+                               <a href="http://blog.801314.top/tag/0IIN5W-Pk/" class="post--keyword"
+                                data-title="JAVA I/O" data-type="post_tag" data-term-id="39">JAVA I/O</a>
                               
                             </div>
                             <div class="item">
-                              <span>2020-05-20</span>
+                              <span>2020-05-29</span>
                             </div>
                           </div>
                         </div>
                         <div class="layout-post-content">
                           <div class="layout-post-item">
                             
-                            <p class="with-img"><img src="http://blog.801314.top/post-images/lesslesswen-xiang-shi-nu-ren-greatergreater-jing-dian-tai-ci.jpg"
-                                class="attachment-full size-full wp-post-image" alt="《闻香识女人》经典台词" /></p>
-                            
-                            <p>1、 如今我走到人生十字路口，我知道哪条路是对的，毫无例外，我就知道，但我从不走，为什么？因为他妈的太苦了！</p>
-<p>2、问题不是哪条路是对的，问题是，你敢不敢走？人即使身残，也因保持灵魂的完整，因为灵魂没有假肢。</p>
-<p>3、 我想有个女人拥住我，我埋在她的秀发里闻香，而第二天醒来，她还在我身边。</p>
-<p>4、我知道哪条路都能通向正道，但是我从不尝试，为什么？因为，走正道太难。</p>
-<p>5、 探戈里无所谓错步的，不像人生。</p>
-<p>6、有时决定了要走，却总是徘徊留恋。有时决定留下，眼神却总望着远方的山水。没关系，唱首歌，走走停停地看看风景。一条路始终有个尽头。</p>
-<p>7、如果一个人是坏人，并不是因为他本性有多恶，只是因为他的生命中积累了太多的的坏。是的，世界上没有坏人，只有在痛苦中的人。</p>
-<p>8、世界就是如此，东窗事发的时候有人走，有人留。</p>
-<p>9、逃避责任的倾向谁都有，但正因如此，世界才呼唤“正直”和“勇气”。</p>
-<p>10、如果你跳错了也没关系，接着跳下去。</p>
-<p>11、舞跳错了还可以继续，但生活不一样。</p>
-<p>12、没有什么比精神残废更可怕，因为没有义肢可以装。一个女人的坚强精神，比她的外在更可贵，因为即便她独自一人，也能光芒四射。</p>
-<p>13、如果一个人是坏人，并不是因为他本性有多恶，只是因为他的生命中积累了太多坏的东西。世界上没有坏人，只有在痛苦中的人。</p>
-<p>14、没有什么比残缺的灵魂更可怕，而且那是任何东西都无法填补的。</p>
+                            <pre><code>import java.io.File;
+import java.io.FileOutputStream;
+import java.io.*;
+
+public class FileTest {
+
+    public static void main(String[] args) {
+
+        FileOutputStream out = null;
+        FileOutputStream outSTr = null;
+        BufferedOutputStream Buff = null;
+        FileWriter fw = null;
+
+        int count = 1000;//写文件行数
+
+        try {
+            //经过测试：FileOutputStream执行耗时:17，6，10 毫秒
+            out = new FileOutputStream(new File(&quot;C:\\Users\\lee\\Desktop\\add.txt&quot;));
+            long begin = System.currentTimeMillis();
+            for (int i = 0; i &lt; count; i++) {
+                out.write(&quot;测试java 文件操作\r\n&quot;.getBytes());
+            }
+            out.close();
+            long end = System.currentTimeMillis();
+            System.out.println(&quot;FileOutputStream执行耗时:&quot; + (end - begin) + &quot; 毫秒&quot;);
+
+            //经过测试：ufferedOutputStream执行耗时:1,1，1 毫秒
+            outSTr = new FileOutputStream(new File(&quot;C:\\Users\\lee\\Desktop\\add0.txt&quot;));
+            Buff = new BufferedOutputStream(outSTr);
+            long begin0 = System.currentTimeMillis();
+            for (int i = 0; i &lt; count; i++) {
+                Buff.write(&quot;测试java 文件操作\r\n&quot;.getBytes());
+            }
+            Buff.flush();
+            Buff.close();
+            long end0 = System.currentTimeMillis();
+            System.out.println(&quot;BufferedOutputStream执行耗时:&quot; + (end0 - begin0) + &quot; 毫秒&quot;);
+
+            //经过测试：FileWriter执行耗时:3,9，5 毫秒
+            fw = new FileWriter(&quot;C:\\Users\\lee\\Desktop\\add2.txt&quot;);
+            long begin3 = System.currentTimeMillis();
+            for (int i = 0; i &lt; count; i++) {
+                fw.write(&quot;测试java 文件操作\r\n&quot;);
+            }
+            fw.close();
+            long end3 = System.currentTimeMillis();
+            System.out.println(&quot;FileWriter执行耗时:&quot; + (end3 - begin3) + &quot; 毫秒&quot;);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fw.close();
+                Buff.close();
+                outSTr.close();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+</code></pre>
 
                           </div>
                         </div>
                         <div class="layout-post-social">
                           <div class="item reader">
-                            <div id="/post/lesslesswen-xiang-shi-nu-ren-greatergreater-jing-dian-tai-ci/" class="leancloud-visitors view"
-                              data-flag-title="《闻香识女人》经典台词">
+                            <div id="/post/java-xie-wen-jian-san-chong-fang-fa-bi-jiao/" class="leancloud-visitors view"
+                              data-flag-title="Java 写文件三种方法比较">
                               <span class="post-meta-item-text">阅读 </span>
                               <span class="leancloud-visitors-count"></span>
                             </div>
@@ -180,65 +227,26 @@
                             
                             <div class="post-card row">
                               
-                              <div class="card-content col-8 col-md-9">
+                              <div class="card-content col-12">
                                 <div class="card-body">
                                   <div class="header">
-                                    <a href="http://blog.801314.top/post/dazhaimen/" class="title">
-                                      <h4>《大宅门》里白景琦的两封遗书</h4>
+                                    <a href="http://blog.801314.top/post/java-du-qu-wen-jian-wan-zheng-ban/" class="title">
+                                      <h4>Java 读取文件完整版</h4>
                                     </a>
                                   </div>
-                                  <div class="inner d-none d-sm-block">
+                                  <div class="inner">
                                     <div class="abstract">
                                       
                                     </div>
                                   </div>
                                 </div>
                                 <div class="card-footer">
-                                  <div class="item"><span>上一篇</span></div>
-                                  <div class="item">2020-05-21</div>
-                                </div>
-                              </div>
-                              <div class="card-thumb col-4 col-md-3">
-                                <div class="thumb">
-                                  <a href="http://blog.801314.top/post/dazhaimen/"
-                                    style="background-image: url('http://blog.801314.top/post-images/dazhaimen.jpg');"></a>
-                                </div>
-                              </div>
-                              
-                            </div>
-
-                            <div class="post-card row">
-                              
-                              <div class="card-content col-8 col-md-9">
-                                <div class="card-body">
-                                  <div class="header">
-                                    <a href="http://blog.801314.top/post/jiagoushi-gongju/" class="title">
-                                      <h4>资深架构师成长路线 -- 分布式方案及团队协作工具</h4>
-                                    </a>
-                                  </div>
-                                  <div class="inner d-none d-sm-block">
-                                    <div class="abstract">
-                                      <h2 id="1-分布式事务解决方案">1、分布式事务解决方案</h2>
-<h3 id="事务与锁">事务与锁</h3>
-<h3 id="标准分布式事务">标准分布式事务</h3>
-
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-footer">
                                   <div class="item"><span>下一篇</span></div>
-                                  <div class="item">2020-05-20</div>
-                                </div>
-                              </div>
-                              <div class="card-thumb col-4 col-md-3">
-                                <div class="thumb">
-                                  <a href="http://blog.801314.top/post/jiagoushi-gongju/"
-                                    style="background-image: url('http://blog.801314.top/post-images/jiagoushi-gongju.png');"></a>
+                                  <div class="item">2020-05-29</div>
                                 </div>
                               </div>
                               
                             </div>
-
                             
                           </div>
                         </div>
