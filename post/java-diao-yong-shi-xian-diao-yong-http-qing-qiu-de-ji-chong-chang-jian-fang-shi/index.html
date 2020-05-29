@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+<title>Java调用实现调用http请求的几种常见方式 - 黑白杂色</title>
+<meta name="description" content="没有绝对的纯，黑白也是杂色">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type='text/css' rel='stylesheet' href='http://blog.801314.top/styles/main.css' media='screen' />
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css">
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/jquery.js'></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+  <div class="layout theme-dark">
+    <div class="layout-header">
+
+	<div class="layout-header-main">
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+
+					<div class="navbar">
+
+						<div class="logo">
+							<a href="http://blog.801314.top">
+								<img class="logo"
+									src="http://blog.801314.top/media/images/site_avatar.png?v=1590749647248"
+									alt="">
+							</a>
+						</div>
+
+						<div class="menu d-md-inline-block d-none">
+							<ul class="layout-navigation-list">
+								
+								<li class="layout-navigation-item"><a title="主页"
+										href="/">主页</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="历史文章"
+										href="/archives">历史文章</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="文章分类"
+										href="/tags">文章分类</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="联系我"
+										href="http://blog.801314.top/post/zuo-zhe">联系我</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="item d-md-inline-block d-none">
+							<div class="search-icon">
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</div>
+						</div>
+
+
+
+						<div class="d-md-inline-block d-none">
+							<div class="search-lightbox">
+								<div class="search-body">
+
+									<form id="gridea-search-form" data-update="1590749647248" action="/search/" class="search-form">
+										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
+										<button type="submit" class="submit" aria-label="Submit">
+											<i class="fa fa-search" aria-hidden="true"></i>
+										</button>
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="nav d-md-none d-inline-block">
+							<div class="trigger">
+								<i class="fa fa-bars layout-btn-toggle" aria-hidden="true"></i>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+
+
+
+		</div>
+	</div>
+
+</div>
+    <div class="layout-collapse d-md-none">
+	<div class="layout-collapse-main">
+		<ul class="layout-collapse-list">
+			
+			<li class="layout-collapse-item"><a title="主页" href="/">主页</a></li>
+			
+			<li class="layout-collapse-item"><a title="历史文章" href="/archives">历史文章</a></li>
+			
+			<li class="layout-collapse-item"><a title="文章分类" href="/tags">文章分类</a></li>
+			
+			<li class="layout-collapse-item"><a title="联系我" href="http://blog.801314.top/post/zuo-zhe">联系我</a></li>
+			
+
+		</ul>
+	</div>
+</div>
+
+    <div class="layout-content">
+      <div class="layout-content-main">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-12 col-lg-9">
+              <div class="layout-post">
+                <div class="layout-post-body">
+                  <div class="row">
+
+                    <div class="col-12 col-lg-10">
+                      <div class="layout-post-main m-right m-md-right">
+                        <div class="layout-post-header">
+                          <h1 class="layout-post-title">Java调用实现调用http请求的几种常见方式</h1>
+                          <div class="layout-post-meta">
+                            <div class="item">
+                               <a href="http://blog.801314.top/tag/VAtAQZ6Vj/" class="post--keyword"
+                                data-title="http请求" data-type="post_tag" data-term-id="39">http请求</a>
+                              
+                            </div>
+                            <div class="item">
+                              <span>2020-05-29</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="layout-post-content">
+                          <div class="layout-post-item">
+                            
+                            <p>Java项目中调用第三方接口的三种方式：</p>
+<ol>
+<li>通过JDK网络类 java.net.HttpURLConnection</li>
+<li>通过common封装好的 HttpClient</li>
+<li>通过Apache封装好的CloseableHttpClient</li>
+<li>通过SpringBoot-RestTemplate</li>
+</ol>
+<h3 id="通过jdk网络类-javanethttpurlconnection">通过JDK网络类 java.net.HttpURLConnection</h3>
+<p>实现过程：<br>
+Get：<br>
+1. 创建远程连接<br>
+2. 设置连接方式<br>
+3. 设置连接超时时间<br>
+4. 设置响应读取时间<br>
+5. 发起请求<br>
+6. 获取请求数据<br>
+7. 关闭连接</p>
+<pre><code>Post：
+1. 创建远程连接
+2. 设置连接方式
+3. 设置连接超时时间
+4. 设置响应读取时间
+5. 当向远程服务器传送数据/写数据时，需设置为 true （setDoOutput）
+6. 当向远程服务器读取数据时，设置为true， 该参数可有可无 （setDoInput）
+7. 设置传入参数的格式：（setRequestProperty）
+8. 设置鉴权信息：Authorization：（setRequestProperty）
+9. 设置参数
+10. 发起请求
+11. 获取请求数据
+12. 关闭连接
+</code></pre>
+<p>代码：</p>
+<pre><code>package com.riemann.springbootdemo.util.common.httpConnectionUtil;
+
+import org.springframework.lang.Nullable;
+
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
+/**
+ * @author riemann
+ * @date 2019/05/24 23:42
+ */
+public class HttpURLConnectionUtil {
+
+    /**
+     * Http get请求
+     * @param httpUrl 连接
+     * @return 响应数据
+     */
+    public static String doGet(String httpUrl){
+        //链接
+        HttpURLConnection connection = null;
+        InputStream is = null;
+        BufferedReader br = null;
+        StringBuffer result = new StringBuffer();
+        try {
+            //创建连接
+            URL url = new URL(httpUrl);
+            connection = (HttpURLConnection) url.openConnection();
+            //设置请求方式
+            connection.setRequestMethod(&quot;GET&quot;);
+            //设置连接超时时间
+            connection.setReadTimeout(15000);
+            //开始连接
+            connection.connect();
+            //获取响应数据
+            if (connection.getResponseCode() == 200) {
+                //获取返回的数据
+                is = connection.getInputStream();
+                if (null != is) {
+                    br = new BufferedReader(new InputStreamReader(is, &quot;UTF-8&quot;));
+                    String temp = null;
+                    while (null != (temp = br.readLine())) {
+                        result.append(temp);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (null != br) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (null != is) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            //关闭远程连接
+            connection.disconnect();
+        }
+        return result.toString();
+    }
+
+    /**
+     * Http post请求
+     * @param httpUrl 连接
+     * @param param 参数
+     * @return
+     */
+    public static String doPost(String httpUrl, @Nullable String param) {
+        StringBuffer result = new StringBuffer();
+        //连接
+        HttpURLConnection connection = null;
+        OutputStream os = null;
+        InputStream is = null;
+        BufferedReader br = null;
+        try {
+            //创建连接对象
+            URL url = new URL(httpUrl);
+            //创建连接
+            connection = (HttpURLConnection) url.openConnection();
+            //设置请求方法
+            connection.setRequestMethod(&quot;POST&quot;);
+            //设置连接超时时间
+            connection.setConnectTimeout(15000);
+            //设置读取超时时间
+            connection.setReadTimeout(15000);
+            //DoOutput设置是否向httpUrlConnection输出，DoInput设置是否从httpUrlConnection读入，此外发送post请求必须设置这两个
+            //设置是否可读取
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            //设置通用的请求属性
+            connection.setRequestProperty(&quot;accept&quot;, &quot;*/*&quot;);
+            connection.setRequestProperty(&quot;connection&quot;, &quot;Keep-Alive&quot;);
+            connection.setRequestProperty(&quot;user-agent&quot;, &quot;Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)&quot;);
+            connection.setRequestProperty(&quot;Content-Type&quot;, &quot;application/json;charset=utf-8&quot;);
+
+            //拼装参数
+            if (null != param &amp;&amp; param.equals(&quot;&quot;)) {
+                //设置参数
+                os = connection.getOutputStream();
+                //拼装参数
+                os.write(param.getBytes(&quot;UTF-8&quot;));
+            }
+            //设置权限
+            //设置请求头等
+            //开启连接
+            connection.connect();
+            //读取响应
+            if (connection.getResponseCode() == 200) {
+                is = connection.getInputStream();
+                if (null != is) {
+                    br = new BufferedReader(new InputStreamReader(is, &quot;GBK&quot;));
+                    String temp = null;
+                    while (null != (temp = br.readLine())) {
+                        result.append(temp);
+                        result.append(&quot;\r\n&quot;);
+                    }
+                }
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            //关闭连接
+            if(br!=null){
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(os!=null){
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(is!=null){
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            //关闭连接
+            connection.disconnect();
+        }
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        String message = doPost(&quot;https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=13026194071&quot;, &quot;&quot;);
+        System.out.println(message);
+    }
+}
+</code></pre>
+<h3 id="通过apache-common-封装好的-httpclient">通过apache common 封装好的 HttpClient</h3>
+<p>步骤：<br>
+1. 生成一个 HttpClient 对象并设置相应的参数<br>
+2. 生成一个GetMethod对象或PostMethod并设置响应的参数<br>
+3. 用HttpClient生成的对象来执行GetMethod生成的Get方法<br>
+4. 处理响应状态码<br>
+5. 若响应正常，处理Http响应内容<br>
+6. 释放连接</p>
+<p>导入jar包：</p>
+<pre><code>&lt;!--HttpClient--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;commons-httpclient&lt;/groupId&gt;
+    &lt;artifactId&gt;commons-httpclient&lt;/artifactId&gt;
+    &lt;version&gt;3.1&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!--fastjson--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+    &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+    &lt;version&gt;1.2.32&lt;/version&gt;
+&lt;/dependency&gt;
+
+</code></pre>
+<p>代码实现：</p>
+<pre><code>package com.riemann.springbootdemo.util.common.httpConnectionUtil;
+
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.httpclient.*;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+
+import java.io.IOException;
+
+/**
+ * @author riemann
+ * @date 2019/05/25 0:58
+ */
+public class HttpClientUtil {
+    /**
+     * httpClient的get请求方式
+     * 使用GetMethod来访问一个URL对应的网页实现步骤：
+     * 1.生成一个HttpClient对象并设置相应的参数；
+     * 2.生成一个GetMethod对象并设置响应的参数；
+     * 3.用HttpClient生成的对象来执行GetMethod生成的Get方法；
+     * 4.处理响应状态码；
+     * 5.若响应正常，处理HTTP响应内容；
+     * 6.释放连接。
+     * @param url
+     * @param charset
+     * @return
+     */
+    public static String doGet(String url, String charset) {
+        //1.生成HttpClient对象并设置参数
+        HttpClient httpClient = new HttpClient();
+        //设置Http连接超时为5秒
+        httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
+        //2.生成GetMethod对象并设置参数
+        GetMethod getMethod = new GetMethod(url);
+        //设置get请求超时为5秒
+        getMethod.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, 5000);
+        //设置请求重试处理，用的是默认的重试处理：请求三次
+        getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler());
+        String response = &quot;&quot;;
+        //3.执行HTTP GET 请求
+        try {
+            int statusCode = httpClient.executeMethod(getMethod);
+            //4.判断访问的状态码
+            if (statusCode != HttpStatus.SC_OK) {
+                System.err.println(&quot;请求出错：&quot; + getMethod.getStatusLine());
+            }
+            //5.处理HTTP响应内容
+            //HTTP响应头部信息，这里简单打印
+            Header[] headers = getMethod.getResponseHeaders();
+            for(Header h : headers) {
+                System.out.println(h.getName() + &quot;---------------&quot; + h.getValue());
+            }
+            //读取HTTP响应内容，这里简单打印网页内容
+            //读取为字节数组
+            byte[] responseBody = getMethod.getResponseBody();
+            response = new String(responseBody, charset);
+            System.out.println(&quot;-----------response:&quot; + response);
+            //读取为InputStream，在网页内容数据量大时候推荐使用
+            //InputStream response = getMethod.getResponseBodyAsStream();
+        } catch (HttpException e) {
+            //发生致命的异常，可能是协议不对或者返回的内容有问题
+            System.out.println(&quot;请检查输入的URL!&quot;);
+            e.printStackTrace();
+        } catch (IOException e) {
+            //发生网络异常
+            System.out.println(&quot;发生网络异常!&quot;);
+        } finally {
+            //6.释放连接
+            getMethod.releaseConnection();
+        }
+        return response;
+    }
+
+    /**
+     * post请求
+     * @param url
+     * @param json
+     * @return
+     */
+    public static String doPost(String url, JSONObject json){
+        HttpClient httpClient = new HttpClient();
+        PostMethod postMethod = new PostMethod(url);
+
+        postMethod.addRequestHeader(&quot;accept&quot;, &quot;*/*&quot;);
+        postMethod.addRequestHeader(&quot;connection&quot;, &quot;Keep-Alive&quot;);
+        //设置json格式传送
+        postMethod.addRequestHeader(&quot;Content-Type&quot;, &quot;application/json;charset=GBK&quot;);
+        //必须设置下面这个Header
+        postMethod.addRequestHeader(&quot;User-Agent&quot;, &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36&quot;);
+        //添加请求参数
+        postMethod.addParameter(&quot;commentId&quot;, json.getString(&quot;commentId&quot;));
+
+        String res = &quot;&quot;;
+        try {
+            int code = httpClient.executeMethod(postMethod);
+            if (code == 200){
+                res = postMethod.getResponseBodyAsString();
+                System.out.println(res);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(doGet(&quot;http://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=13026194071&quot;, &quot;GBK&quot;));
+        System.out.println(&quot;-----------分割线------------&quot;);
+        System.out.println(&quot;-----------分割线------------&quot;);
+        System.out.println(&quot;-----------分割线------------&quot;);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(&quot;commentId&quot;, &quot;13026194071&quot;);
+        System.out.println(doPost(&quot;http://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=13026194071&quot;, jsonObject));
+    }
+}
+</code></pre>
+<h3 id="通过apache-封装好的-closeablehttpclient">通过Apache 封装好的 CloseableHttpClient</h3>
+<p>CloseableHttpClient 是在 HttpClient 的基础上修改更新而来的。</p>
+<pre><code>&lt;!--CloseableHttpClient--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+    &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+    &lt;version&gt;4.5.2&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!--fastjson--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+    &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+    &lt;version&gt;1.2.32&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<pre><code>package com.riemann.springbootdemo.util.common.httpConnectionUtil;
+
+import com.alibaba.fastjson.JSONObject;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+/**
+ * @author riemann
+ * @date 2019/05/25 1:35
+ */
+public class CloseableHttpClientUtil {
+
+    private static String tokenString = &quot;&quot;;
+    private static String AUTH_TOKEN_EXPIRED = &quot;AUTH_TOKEN_EXPIRED&quot;;
+    private static CloseableHttpClient httpClient = null;
+
+    /**
+     * 以get方式调用第三方接口
+     * @param url
+     * @param token
+     * @return
+     */
+    public static String doGet(String url, String token) {
+        //创建HttpClient对象
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        HttpGet httpGet = new HttpGet(url);
+        if (null != tokenString &amp;&amp; !tokenString.equals(&quot;&quot;)) {
+            tokenString = getToken();
+        }
+        //api_gateway_auth_token自定义header头，用于token验证使用
+        httpGet.addHeader(&quot;api_gateway_auth_token&quot;,tokenString);
+        httpGet.addHeader(&quot;User-Agent&quot;, &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36&quot;);
+        try {
+            HttpResponse response = httpClient.execute(httpGet);
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                //返回json格式
+                String res = EntityUtils.toString(response.getEntity());
+                return res;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 以post方式调用第三方接口
+     * @param url
+     * @param json
+     * @return
+     */
+    public static String doPost(String url, JSONObject json) {
+        if (null == httpClient) {
+            httpClient = HttpClientBuilder.create().build();
+        }
+        HttpPost httpPost = new HttpPost(url);
+        if (null != tokenString &amp;&amp; tokenString.equals(&quot;&quot;)) {
+            tokenString = getToken();
+        }
+        //api_gateway_auth_token自定义header头，用于token验证使用
+        httpPost.addHeader(&quot;api_gateway_auth_token&quot;, tokenString);
+        httpPost.addHeader(&quot;User-Agent&quot;, &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36&quot;);
+        try {
+            StringEntity se = new StringEntity(json.toString());
+            se.setContentEncoding(&quot;UTF-8&quot;);
+            //发送json数据需要设置contentType
+            se.setContentType(&quot;application/x-www-form-urlencoded&quot;);
+            //设置请求参数
+            httpPost.setEntity(se);
+            HttpResponse response = httpClient.execute(httpPost);
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                //返回json格式
+                String res = EntityUtils.toString(response.getEntity());
+                return res;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (httpClient != null){
+                try {
+                    httpClient.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取第三方接口的token
+     */
+    public static String getToken() {
+        String token = &quot;&quot;;
+        JSONObject object = new JSONObject();
+        object.put(&quot;appid&quot;, &quot;appid&quot;);
+        object.put(&quot;secretkey&quot;, &quot;secretkey&quot;);
+        if (null == httpClient) {
+            httpClient = HttpClientBuilder.create().build();
+        }
+        HttpPost httpPost = new HttpPost(&quot;http://localhost/login&quot;);
+        httpPost.addHeader(&quot;User-Agent&quot;, &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36&quot;);
+        try {
+            StringEntity se = new StringEntity(object.toString());
+            se.setContentEncoding(&quot;UTF-8&quot;);
+            //发送json数据需要设置contentType
+            se.setContentType(&quot;application/x-www-form-urlencoded&quot;);
+            //设置请求参数
+            httpPost.setEntity(se);
+            HttpResponse response = httpClient.execute(httpPost);
+            //这里可以把返回的结果按照自定义的返回数据结果，把string转换成自定义类
+            //ResultTokenBO result = JSONObject.parseObject(response, ResultTokenBO.class);
+            //把response转为jsonObject
+            JSONObject result = (JSONObject) JSONObject.parseObject(String.valueOf(response));
+            if (result.containsKey(&quot;token&quot;)) {
+                token = result.getString(&quot;token&quot;);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return token;
+    }
+
+    /**
+     * 测试
+     */
+    public static void test(String telephone) {
+
+        JSONObject object = new JSONObject();
+        object.put(&quot;telephone&quot;, telephone);
+
+        //首先获取token
+        tokenString = getToken();
+        String response = doPost(&quot;http://localhost/searchUrl&quot;, object);
+        //如果返回的结果是list形式的，需要使用JSONObject.parseArray转换
+        //List&lt;Result&gt; list = JSONObject.parseArray(response, Result.class);
+        System.out.println(response);
+    }
+
+    public static void main(String[] args) {
+        test(&quot;12345678910&quot;);
+    }
+}
+</code></pre>
+<h3 id="通过springboot-resttemplate">通过SpringBoot-RestTemplate</h3>
+<p>springBoot-RestTemplate 是上面三种方式的集大成者，代码编写更加简单，目前可以采用的调用第三方接口有：</p>
+<ul>
+<li>delete() 在特定的URL上对资源执行HTTP DELETE操作</li>
+<li>exchange() 在URL上执行特定的HTTP方法，返回包含对象的ResponseEntity，这个对象是从响应体中映射得到的</li>
+<li>execute() 在URL上执行特定的HTTP方法，返回一个从响应体映射得到的对象</li>
+<li>getForEntity() 发送一个HTTP GET请求，返回的ResponseEntity包含了响应体所映射成的对象</li>
+<li>getForObject() 发送一个HTTP GET请求，返回的请求体将映射为一个对象</li>
+<li>postForEntity() POST 数据到一个URL，返回包含一个对象的ResponseEntity，这个对象是从响应体中映射得到的</li>
+<li>postForObject() POST 数据到一个URL，返回根据响应体匹配形成的对象</li>
+<li>headForHeaders() 发送HTTP HEAD请求，返回包含特定资源URL的HTTP头</li>
+<li>optionsForAllow() 发送HTTP OPTIONS请求，返回对特定URL的Allow头信息</li>
+<li>postForLocation() POST 数据到一个URL，返回新创建资源的URL</li>
+<li>put() PUT 资源到特定的URL</li>
+</ul>
+<pre><code>&lt;parent&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+        &lt;version&gt;2.0.4.RELEASE&lt;/version&gt;
+    &lt;/parent&gt;
+
+    &lt;dependencies&gt;
+        &lt;!--CloseableHttpClient--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+            &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+            &lt;version&gt;4.5.2&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!--spring restTemplate--&gt;
+        &lt;!-- @ConfigurationProperties annotation processing (metadata for IDEs)
+                生成spring-configuration-metadata.json类，需要引入此类--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-configuration-processor&lt;/artifactId&gt;
+            &lt;optional&gt;true&lt;/optional&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-aop&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+            &lt;exclusions&gt;
+                &lt;exclusion&gt;
+                    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+                    &lt;artifactId&gt;spring-boot-starter-tomcat&lt;/artifactId&gt;
+                &lt;/exclusion&gt;
+            &lt;/exclusions&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-jetty&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+</code></pre>
+<p>在启动类同包下创建RestTemplateConfig.java 类</p>
+<pre><code>import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
+
+/**
+ * @author riemann
+ * @date 2019/05/25 2:16
+ */
+@Configuration
+public class RestTemplateConfig {
+
+    @Bean
+    public RestTemplate restTemplate(ClientHttpRequestFactory factory){
+        return new RestTemplate(factory);
+    }
+
+    @Bean
+    public ClientHttpRequestFactory simpleClientHttpRequestFactory(){
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(15000);
+        factory.setReadTimeout(5000);
+        return factory;
+    }
+}
+</code></pre>
+<p>然后在Service类（RestTemplateToInterface）中注入使用</p>
+<pre><code>import com.alibaba.fastjson.JSONObject;
+import com.swordfall.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+/**
+ * @author riemann
+ * @date 2019/05/25 2:20
+ */
+@Service
+public class RestTemplateToInterface {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    /**
+     * 以get方式请求第三方http接口 getForEntity
+     * @param url
+     * @return
+     */
+    public User doGetWith1(String url){
+        ResponseEntity&lt;User&gt; responseEntity = restTemplate.getForEntity(url, User.class);
+        User user = responseEntity.getBody();
+        return user;
+    }
+
+    /**
+     * 以get方式请求第三方http接口 getForObject
+     * 返回值返回的是响应体，省去了我们再去getBody()
+     * @param url
+     * @return
+     */
+    public User doGetWith2(String url){
+        User user  = restTemplate.getForObject(url, User.class);
+        return user;
+    }
+
+    /**
+     * 以post方式请求第三方http接口 postForEntity
+     * @param url
+     * @return
+     */
+    public String doPostWith1(String url){
+        User user = new User(&quot;小白&quot;, 20);
+        ResponseEntity&lt;String&gt; responseEntity = restTemplate.postForEntity(url, user, String.class);
+        String body = responseEntity.getBody();
+        return body;
+    }
+
+    /**
+     * 以post方式请求第三方http接口 postForEntity
+     * @param url
+     * @return
+     */
+    public String doPostWith2(String url){
+        User user = new User(&quot;小白&quot;, 20);
+        String body = restTemplate.postForObject(url, user, String.class);
+        return body;
+    }
+
+    /**
+     * exchange
+     * @return
+     */
+    public String doExchange(String url, Integer age, String name){
+        //header参数
+        HttpHeaders headers = new HttpHeaders();
+        String token = &quot;asdfaf2322&quot;;
+        headers.add(&quot;authorization&quot;, token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        //放入body中的json参数
+        JSONObject obj = new JSONObject();
+        obj.put(&quot;age&quot;, age);
+        obj.put(&quot;name&quot;, name);
+
+        //组装
+        HttpEntity&lt;JSONObject&gt; request = new HttpEntity&lt;&gt;(obj, headers);
+        ResponseEntity&lt;String&gt; responseEntity = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+        String body = responseEntity.getBody();
+        return body;
+    }
+}
+</code></pre>
+
+                          </div>
+                        </div>
+                        <div class="layout-post-social">
+                          <div class="item reader">
+                            <div id="/post/java-diao-yong-shi-xian-diao-yong-http-qing-qiu-de-ji-chong-chang-jian-fang-shi/" class="leancloud-visitors view"
+                              data-flag-title="Java调用实现调用http请求的几种常见方式">
+                              <span class="post-meta-item-text">阅读 </span>
+                              <span class="leancloud-visitors-count"></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="layout-post-navigation">
+                          <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="http://blog.801314.top/post/java-xie-wen-jian-san-chong-fang-fa-bi-jiao/" class="title">
+                                      <h4>Java 写文件三种方法比较</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2020-05-29</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+                            
+                          </div>
+                        </div>
+
+                        <div class="layout-comments"></div>
+                        
+                        <script type="text/javascript" src='http://blog.801314.top/media/scripts/zan.js'></script>
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/av-min.js'></script>
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/Valine.min.js'></script>
+
+<script>
+  var valine = new Valine();
+  valine.init({
+    el: '.layout-comments',
+    appId: 'zF1TA09DTcGGHk6VGTJsez35-gzGzoHsz',
+    appKey: '8agqkoocVd5mVgPbpjNqTKYx',
+    notify: false,
+    verify: false,
+    visitor: true,
+    avatar: 'mp',
+    placeholder: '加入讨论...'
+  })
+</script>
+                        
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2 d-none d-lg-block">
+                      <div class="layout-post-sidebar">
+                        <div class="layout-sidebar-item">
+                          <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E9%80%9A%E8%BF%87jdk%E7%BD%91%E7%BB%9C%E7%B1%BB-javanethttpurlconnection">通过JDK网络类 java.net.HttpURLConnection</a></li>
+<li><a href="#%E9%80%9A%E8%BF%87apache-common-%E5%B0%81%E8%A3%85%E5%A5%BD%E7%9A%84-httpclient">通过apache common 封装好的 HttpClient</a></li>
+<li><a href="#%E9%80%9A%E8%BF%87apache-%E5%B0%81%E8%A3%85%E5%A5%BD%E7%9A%84-closeablehttpclient">通过Apache 封装好的 CloseableHttpClient</a></li>
+<li><a href="#%E9%80%9A%E8%BF%87springboot-resttemplate">通过SpringBoot-RestTemplate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-totop d-none"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+
+    	<div class="layout-footer">
+
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+					<div class="footer">
+						<div class="row">
+							<div class="col-12 col-md-9">
+								<div class="footer-copy">
+									
+									<span>© 2020.5.16 </span>
+									<a href="http://blog.801314.top" title="黑白杂色">黑白杂色</a>
+									<span class="px-2">⋅</span>
+									
+									Powered by <a href="https://github.com/getgridea/gridea" target="_blank">blackWhite</a>
+									<div class="footer-icp d-none d-sm-inline-block">
+										<span class="px-2">⋅</span>
+										
+										<a href="http://www.beian.miit.gov.cn" target="_blank">没有绝对的纯，黑白也是杂色 </a>
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 d-none d-md-block">
+								<div class="footer-links">
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="807727909" target="_blank">
+											<i class="fa fa-qq" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="https://weibo.com/p/1005053905393397/home?from=page_100505&amp;mod=TAB&amp;is_all=1#place" target="_blank">
+											<i class="fa fa-weibo" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="yue142556" target="_blank">
+											<i class="fa fa-weixin" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript" src='http://blog.801314.top/media/scripts/main.js'></script>
+	
+
+  </div>
+</body>
+
+</html>
