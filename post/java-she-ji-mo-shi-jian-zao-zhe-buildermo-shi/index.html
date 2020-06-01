@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-<title>《闻香识女人》经典台词 - 黑白杂色</title>
+<title>Java 设计模式--建造者（Builder）模式 - 黑白杂色</title>
 <meta name="description" content="没有绝对的纯，黑白也是杂色">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -130,45 +130,286 @@
                     <div class="col-12 col-lg-10">
                       <div class="layout-post-main m-right m-md-right">
                         <div class="layout-post-header">
-                          <h1 class="layout-post-title">《闻香识女人》经典台词</h1>
+                          <h1 class="layout-post-title">Java 设计模式--建造者（Builder）模式</h1>
                           <div class="layout-post-meta">
                             <div class="item">
-                               <a href="http://blog.801314.top/tag/EgFVhYqju/" class="post--keyword"
-                                data-title="电影台词" data-type="post_tag" data-term-id="39">电影台词</a>
                               
                             </div>
                             <div class="item">
-                              <span>2020-05-20</span>
+                              <span>2020-06-01</span>
                             </div>
                           </div>
                         </div>
                         <div class="layout-post-content">
                           <div class="layout-post-item">
                             
-                            <p class="with-img"><img src="http://blog.801314.top/post-images/lesslesswen-xiang-shi-nu-ren-greatergreater-jing-dian-tai-ci.jpg"
-                                class="attachment-full size-full wp-post-image" alt="《闻香识女人》经典台词" /></p>
-                            
-                            <p>1、 如今我走到人生十字路口，我知道哪条路是对的，毫无例外，我就知道，但我从不走，为什么？因为他妈的太苦了！</p>
-<p>2、问题不是哪条路是对的，问题是，你敢不敢走？人即使身残，也因保持灵魂的完整，因为灵魂没有假肢。</p>
-<p>3、 我想有个女人拥住我，我埋在她的秀发里闻香，而第二天醒来，她还在我身边。</p>
-<p>4、我知道哪条路都能通向正道，但是我从不尝试，为什么？因为，走正道太难。</p>
-<p>5、 探戈里无所谓错步的，不像人生。</p>
-<p>6、有时决定了要走，却总是徘徊留恋。有时决定留下，眼神却总望着远方的山水。没关系，唱首歌，走走停停地看看风景。一条路始终有个尽头。</p>
-<p>7、如果一个人是坏人，并不是因为他本性有多恶，只是因为他的生命中积累了太多的的坏。是的，世界上没有坏人，只有在痛苦中的人。</p>
-<p>8、世界就是如此，东窗事发的时候有人走，有人留。</p>
-<p>9、逃避责任的倾向谁都有，但正因如此，世界才呼唤“正直”和“勇气”。</p>
-<p>10、如果你跳错了也没关系，接着跳下去。</p>
-<p>11、舞跳错了还可以继续，但生活不一样。</p>
-<p>12、没有什么比精神残废更可怕，因为没有义肢可以装。一个女人的坚强精神，比她的外在更可贵，因为即便她独自一人，也能光芒四射。</p>
-<p>13、如果一个人是坏人，并不是因为他本性有多恶，只是因为他的生命中积累了太多坏的东西。世界上没有坏人，只有在痛苦中的人。</p>
-<p>14、没有什么比残缺的灵魂更可怕，而且那是任何东西都无法填补的。</p>
+                            <p>建造者模式是日常开发中比较常见的设计模式，它的主要作用就是讲复杂事务创建的过程抽象出来，该抽象的不同实现方式，创建出的对象也不同。<br>
+通俗地讲，创建一个对象一般都会有一个固定的步骤，这个固定的步骤我们把它抽象出来。</p>
+<p>建造者模式分为两种：</p>
+<ul>
+<li>经典建造者模式</li>
+<li>变种建造者模式</li>
+</ul>
+<h3 id="经典建造者模式">经典建造者模式</h3>
+<p>UML类图<br>
+<img src="http://blog.801314.top/post-images/1590993459408.jpg" alt="" loading="lazy"><br>
+四个角色：</p>
+<ul>
+<li>Product -- 产品</li>
+<li>Builder -- 抽象的步骤</li>
+<li>ConcreteBuilder -- Builder具体的实现</li>
+<li>Director -- 使用者</li>
+</ul>
+<p>代码：</p>
+<pre><code> public class Computer {
+    /*CPU*/
+    private String CPU;
+    /*内存*/
+    private String memory;
+    /*硬盘*/
+    private String hardDisk;
+    /*键盘*/
+    private String keyboard;
+    /*鼠标*/
+    private String mouse;
+
+    public String getCPU() {
+        return CPU;
+    }
+
+    public void setCPU(String CPU) {
+        this.CPU = CPU;
+    }
+
+    public String getMemory() {
+        return memory;
+    }
+
+    public void setMemory(String memory) {
+        this.memory = memory;
+    }
+
+    public String getHardDisk() {
+        return hardDisk;
+    }
+
+    public void setHardDisk(String hardDisk) {
+        this.hardDisk = hardDisk;
+    }
+
+    public String getKeyboard() {
+        return keyboard;
+    }
+
+    public void setKeyboard(String keyboard) {
+        this.keyboard = keyboard;
+    }
+
+    public String getMouse() {
+        return mouse;
+    }
+
+    public void setMouse(String mouse) {
+        this.mouse = mouse;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Computer{&quot; +
+                &quot;CPU='&quot; + CPU + '\'' +
+                &quot;, memory='&quot; + memory + '\'' +
+                &quot;, hardDisk='&quot; + hardDisk + '\'' +
+                &quot;, keyboard='&quot; + keyboard + '\'' +
+                &quot;, mouse='&quot; + mouse + '\'' +
+                '}';
+    }
+}
+</code></pre>
+<p>Builder 类:</p>
+<pre><code>public interface ComputerConfigBuilder {
+    void setCPU();
+    void setMemery();
+    void setHardDisk();
+    void setKeyboard();
+    void setMouse();
+    Computer getComputer();
+}
+</code></pre>
+<p>具体实现：</p>
+<pre><code>public class LowConfigBuilder implements ComputerConfigBuilder {
+
+    private Computer mComputer;
+
+    public LowConfigBuilder(){
+        this.mComputer = new Computer();
+    }
+
+    @Override
+    public void setCPU() {
+        mComputer.setCPU(&quot;i5&quot;);
+    }
+
+    @Override
+    public void setMemery() {
+        mComputer.setMemory(&quot;8G&quot;);
+    }
+
+    @Override
+    public void setHardDisk() {
+        mComputer.setHardDisk(&quot;500G&quot;);
+    }
+
+    @Override
+    public void setKeyboard() {
+        mComputer.setKeyboard(&quot;薄膜键盘&quot;);
+    }
+
+    @Override
+    public void setMouse() {
+        mComputer.setMouse(&quot;有线鼠标&quot;);
+    }
+
+    @Override
+    public Computer getComputer() {
+        return mComputer;
+    }
+}
+</code></pre>
+<p>Director:</p>
+<pre><code>public class Director {
+    private ComputerConfigBuilder mBuilder;
+    public void setBuilder(ComputerConfigBuilder builder){
+        this.mBuilder = builder;
+    }
+    public void createComputer(){
+        mBuilder.setCPU();
+        mBuilder.setMemery();
+        mBuilder.setHardDisk();
+        mBuilder.setKeyboard();
+        mBuilder.setMouse();
+    }
+    public Computer getComputer(){
+        return mBuilder.getComputer();
+    }
+}
+</code></pre>
+<p>Test:</p>
+<pre><code>Director director = new Director();//创建装机人员
+director.setBuilder(new LowConfigBuilder()); //告诉装机人员电脑配置，这里为低配版
+director.createComputer(); //装机人员开始组装
+Computer computer = director.getComputer(); //从装机人员获取组装好的电脑
+System.out.print(&quot;电脑配置：&quot; + computer.toString());  //查看电脑配置
+
+director.setBuilder(new HighConfigBuider());
+director.createComputer();
+Computer computer = director.getComputer();
+System.out.print(&quot;电脑配置：&quot; + computer.toString());
+</code></pre>
+<h3 id="变种builder模式">变种Builder模式</h3>
+<p>代码：</p>
+<pre><code>public class Person {
+    /*名字（必须）*/
+    private final String name;
+    /*性别（必须）*/
+    private final String gender;
+    /*年龄（非必须）*/
+    private final String age;
+    /*鞋子（非必须）*/
+    private final String shoes;
+    /*衣服（非必须）*/
+    private final String clothes;
+    /*钱（非必须）*/
+    private final String money;
+    /*房子（非必须）*/
+    private final String house;
+    /*汽车（非必须）*/
+    private final String car;
+    /*职业（非必须）*/
+    private final String career;
+
+
+    private Person(Builder builder) {
+        this.name = builder.name;
+        this.gender = builder.gender;
+        this.age = builder.age;
+        this.shoes = builder.shoes;
+        this.clothes = builder.clothes;
+        this.money = builder.money;
+        this.house = builder.house;
+        this.car = builder.car;
+        this.career = builder.career;
+    }
+
+    public static class Builder {
+        private final String name;
+        private final String gender;
+        private String age;
+        private String shoes;
+        private String clothes;
+        private String money;
+        private String house;
+        private String car;
+        private String career;
+
+        public Builder(String name,String gender) {
+            this.name = name;
+            this.gender = gender;
+        }
+
+        public Builder age(String age) {
+            this.age = age;
+            return this;
+        }
+
+        public Builder car(String car) {
+            this.car = car;
+            return this;
+        }
+
+        public Builder shoes(String shoes) {
+            this.shoes = shoes;
+            return this;
+        }
+
+        public Builder clothes(String clothes) {
+            this.clothes = clothes;
+            return this;
+        }
+
+        public Builder money(String money) {
+            this.money = money;
+            return this;
+        }
+
+        public Builder house(String house) {
+            this.house = house;
+            return this;
+        }
+
+        public Builder career(String career) {
+            this.career = career;
+            return this;
+        }
+
+        public Person build(){
+            return new Person(this);
+        }
+    }
+</code></pre>
+<p>Test:</p>
+<pre><code>        Person person = new Person.Builder(&quot;张三&quot;,&quot;男&quot;)
+                .age(&quot;12&quot;)
+                .money(&quot;1000000&quot;)
+                .car(&quot;宝马&quot;)
+                .build();
+</code></pre>
 
                           </div>
                         </div>
                         <div class="layout-post-social">
                           <div class="item reader">
-                            <div id="/post/lesslesswen-xiang-shi-nu-ren-greatergreater-jing-dian-tai-ci/" class="leancloud-visitors view"
-                              data-flag-title="《闻香识女人》经典台词">
+                            <div id="/post/java-she-ji-mo-shi-jian-zao-zhe-buildermo-shi/" class="leancloud-visitors view"
+                              data-flag-title="Java 设计模式--建造者（Builder）模式">
                               <span class="post-meta-item-text">阅读 </span>
                               <span class="leancloud-visitors-count"></span>
                             </div>
@@ -180,65 +421,26 @@
                             
                             <div class="post-card row">
                               
-                              <div class="card-content col-8 col-md-9">
+                              <div class="card-content col-12">
                                 <div class="card-body">
                                   <div class="header">
-                                    <a href="http://blog.801314.top/post/dazhaimen/" class="title">
-                                      <h4>《大宅门》里白景琦的两封遗书</h4>
+                                    <a href="http://blog.801314.top/post/java-diao-yong-shi-xian-diao-yong-http-qing-qiu-de-ji-chong-chang-jian-fang-shi/" class="title">
+                                      <h4>Java调用实现调用http请求的几种常见方式</h4>
                                     </a>
                                   </div>
-                                  <div class="inner d-none d-sm-block">
+                                  <div class="inner">
                                     <div class="abstract">
                                       
                                     </div>
                                   </div>
                                 </div>
                                 <div class="card-footer">
-                                  <div class="item"><span>上一篇</span></div>
-                                  <div class="item">2020-05-21</div>
-                                </div>
-                              </div>
-                              <div class="card-thumb col-4 col-md-3">
-                                <div class="thumb">
-                                  <a href="http://blog.801314.top/post/dazhaimen/"
-                                    style="background-image: url('http://blog.801314.top/post-images/dazhaimen.jpg');"></a>
-                                </div>
-                              </div>
-                              
-                            </div>
-
-                            <div class="post-card row">
-                              
-                              <div class="card-content col-8 col-md-9">
-                                <div class="card-body">
-                                  <div class="header">
-                                    <a href="http://blog.801314.top/post/jiagoushi-gongju/" class="title">
-                                      <h4>资深架构师成长路线 -- 分布式方案及团队协作工具</h4>
-                                    </a>
-                                  </div>
-                                  <div class="inner d-none d-sm-block">
-                                    <div class="abstract">
-                                      <h2 id="1-分布式事务解决方案">1、分布式事务解决方案</h2>
-<h3 id="事务与锁">事务与锁</h3>
-<h3 id="标准分布式事务">标准分布式事务</h3>
-
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-footer">
                                   <div class="item"><span>下一篇</span></div>
-                                  <div class="item">2020-05-20</div>
-                                </div>
-                              </div>
-                              <div class="card-thumb col-4 col-md-3">
-                                <div class="thumb">
-                                  <a href="http://blog.801314.top/post/jiagoushi-gongju/"
-                                    style="background-image: url('http://blog.801314.top/post-images/jiagoushi-gongju.png');"></a>
+                                  <div class="item">2020-05-29</div>
                                 </div>
                               </div>
                               
                             </div>
-
                             
                           </div>
                         </div>
@@ -269,7 +471,19 @@
                     <div class="col-12 col-lg-2 d-none d-lg-block">
                       <div class="layout-post-sidebar">
                         <div class="layout-sidebar-item">
-                          
+                          <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E7%BB%8F%E5%85%B8%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F">经典建造者模式</a></li>
+<li><a href="#%E5%8F%98%E7%A7%8Dbuilder%E6%A8%A1%E5%BC%8F">变种Builder模式</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
                         </div>
                       </div>
                     </div>

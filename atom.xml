@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://blog.801314.top</id>
     <title>黑白杂色</title>
-    <updated>2020-05-29T10:54:10.718Z</updated>
+    <updated>2020-06-01T06:44:41.255Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://blog.801314.top"/>
     <link rel="self" href="http://blog.801314.top/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>http://blog.801314.top/images/avatar.png</logo>
     <icon>http://blog.801314.top/favicon.ico</icon>
     <rights>All rights reserved 2020, 黑白杂色</rights>
+    <entry>
+        <title type="html"><![CDATA[Java 设计模式--建造者（Builder）模式]]></title>
+        <id>http://blog.801314.top/post/java-she-ji-mo-shi-jian-zao-zhe-buildermo-shi/</id>
+        <link href="http://blog.801314.top/post/java-she-ji-mo-shi-jian-zao-zhe-buildermo-shi/">
+        </link>
+        <updated>2020-06-01T06:32:30.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Java调用实现调用http请求的几种常见方式]]></title>
         <id>http://blog.801314.top/post/java-diao-yong-shi-xian-diao-yong-http-qing-qiu-de-ji-chong-chang-jian-fang-shi/</id>
@@ -52,12 +59,5 @@
 <h3 id="线程池">线程池</h3>
 <h4 id="创建参数对工作机制对影响">创建参数对工作机制对影响</h4>
 ]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[《大宅门》里白景琦的两封遗书]]></title>
-        <id>http://blog.801314.top/post/dazhaimen/</id>
-        <link href="http://blog.801314.top/post/dazhaimen/">
-        </link>
-        <updated>2020-05-21T01:36:27.000Z</updated>
     </entry>
 </feed>
