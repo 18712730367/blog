@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://blog.801314.top</id>
     <title>黑白杂色</title>
-    <updated>2020-06-01T06:45:11.297Z</updated>
+    <updated>2020-06-01T08:05:33.266Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://blog.801314.top"/>
     <link rel="self" href="http://blog.801314.top/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>http://blog.801314.top/images/avatar.png</logo>
     <icon>http://blog.801314.top/favicon.ico</icon>
     <rights>All rights reserved 2020, 黑白杂色</rights>
+    <entry>
+        <title type="html"><![CDATA[Java 泛型详解]]></title>
+        <id>http://blog.801314.top/post/java-fan-xing-xiang-jie/</id>
+        <link href="http://blog.801314.top/post/java-fan-xing-xiang-jie/">
+        </link>
+        <updated>2020-06-01T07:45:02.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Java 设计模式--建造者（Builder）模式]]></title>
         <id>http://blog.801314.top/post/java-she-ji-mo-shi-jian-zao-zhe-buildermo-shi/</id>
@@ -44,20 +51,5 @@
         <link href="http://blog.801314.top/post/suo-yin-de-zuo-yong/">
         </link>
         <updated>2020-05-25T07:38:25.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Java 基础篇]]></title>
-        <id>http://blog.801314.top/post/mianshi-java-jichu/</id>
-        <link href="http://blog.801314.top/post/mianshi-java-jichu/">
-        </link>
-        <updated>2020-05-21T02:20:37.000Z</updated>
-        <summary type="html"><![CDATA[<h2 id="让程序性能优异的并发利器">让程序性能优异的并发利器</h2>
-<h3 id="线程池">线程池</h3>
-<h4 id="创建参数对工作机制对影响">创建参数对工作机制对影响</h4>
-]]></summary>
-        <content type="html"><![CDATA[<h2 id="让程序性能优异的并发利器">让程序性能优异的并发利器</h2>
-<h3 id="线程池">线程池</h3>
-<h4 id="创建参数对工作机制对影响">创建参数对工作机制对影响</h4>
-]]></content>
     </entry>
 </feed>
