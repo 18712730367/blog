@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+<title>SLF4J 作用及其实现原理 - 黑白杂色</title>
+<meta name="description" content="没有绝对的纯，黑白也是杂色">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type='text/css' rel='stylesheet' href='http://blog.801314.top/styles/main.css' media='screen' />
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css">
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/jquery.js'></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+  <div class="layout theme-dark">
+    <div class="layout-header">
+
+	<div class="layout-header-main">
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+
+					<div class="navbar">
+
+						<div class="logo">
+							<a href="http://blog.801314.top">
+								<img class="logo"
+									src="http://blog.801314.top/media/images/site_avatar.png?v=1591177533743"
+									alt="">
+							</a>
+						</div>
+
+						<div class="menu d-md-inline-block d-none">
+							<ul class="layout-navigation-list">
+								
+								<li class="layout-navigation-item"><a title="主页"
+										href="/">主页</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="历史文章"
+										href="/archives">历史文章</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="文章分类"
+										href="/tags">文章分类</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="联系我"
+										href="http://blog.801314.top/post/zuo-zhe">联系我</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="item d-md-inline-block d-none">
+							<div class="search-icon">
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</div>
+						</div>
+
+
+
+						<div class="d-md-inline-block d-none">
+							<div class="search-lightbox">
+								<div class="search-body">
+
+									<form id="gridea-search-form" data-update="1591177533743" action="/search/" class="search-form">
+										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
+										<button type="submit" class="submit" aria-label="Submit">
+											<i class="fa fa-search" aria-hidden="true"></i>
+										</button>
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="nav d-md-none d-inline-block">
+							<div class="trigger">
+								<i class="fa fa-bars layout-btn-toggle" aria-hidden="true"></i>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+
+
+
+		</div>
+	</div>
+
+</div>
+    <div class="layout-collapse d-md-none">
+	<div class="layout-collapse-main">
+		<ul class="layout-collapse-list">
+			
+			<li class="layout-collapse-item"><a title="主页" href="/">主页</a></li>
+			
+			<li class="layout-collapse-item"><a title="历史文章" href="/archives">历史文章</a></li>
+			
+			<li class="layout-collapse-item"><a title="文章分类" href="/tags">文章分类</a></li>
+			
+			<li class="layout-collapse-item"><a title="联系我" href="http://blog.801314.top/post/zuo-zhe">联系我</a></li>
+			
+
+		</ul>
+	</div>
+</div>
+
+    <div class="layout-content">
+      <div class="layout-content-main">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-12 col-lg-9">
+              <div class="layout-post">
+                <div class="layout-post-body">
+                  <div class="row">
+
+                    <div class="col-12 col-lg-10">
+                      <div class="layout-post-main m-right m-md-right">
+                        <div class="layout-post-header">
+                          <h1 class="layout-post-title">SLF4J 作用及其实现原理</h1>
+                          <div class="layout-post-meta">
+                            <div class="item">
+                              
+                            </div>
+                            <div class="item">
+                              <span>2020-06-03</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="layout-post-content">
+                          <div class="layout-post-item">
+                            
+                            <p>文章转载：https://www.cnblogs.com/xrq730/p/8619156.html</p>
+<h3 id="简单回顾门面模式">简单回顾门面模式</h3>
+<p>slf4j 是门面模式的典型应用，全称是 simple Loging Facade For Java, 是一个为Java程序提供日志输出的统一接口，并不是一个具体的实现方案。就好像JDBC一样，只是一种接口规则定义而已。</p>
+<p>门面模式，其核心为<strong>外部与一个子系统的通信必须通过一个统一的外观对象进行，使得子系统更易于使用。</strong><br>
+<img src="http://blog.801314.top/post-images/1591176389799.jpg" alt="" loading="lazy"><br>
+门面模式的核心为Facade，即门面对象，门面对象核心为几个点：</p>
+<ul>
+<li>知道所有子角色的功能和责任</li>
+<li>将客户端发来的请求委派带子系统中，没有实际业务逻辑</li>
+<li>不参与子系统内业务逻辑的实现</li>
+</ul>
+<h3 id="为什么使用slf4j">为什么使用slf4j</h3>
+<p>使用slf4j可以对客户端应用解耦。因为我们在代码实现中引入log日志的时候，用的是接口，所以可以实时的根据情况来调换具体的日志实现类。</p>
+<p>举个例子：<br>
+我们自己的系统使用了 logback 日志系统<br>
+我们系统使用了A.jar，A.jar中使用的日志系统为 log4j<br>
+我们系统又使用了B.jar，B.jar 中使用的日志系统为 slf4j-simple<br>
+这样，我们的系统就不得不同时支持并维护logback，log4j，slf4j-simple 三种日志框架，非常不方便。</p>
+<p>解决这个问题的方式就是引入一个适配层，由适配层决定使用哪一种日志系统，而使用端只需要做的事情就是打印日志，而不需要关系如何打印日志，slf4j或者common-logging就是这种适配层。<br>
+<strong>slf4j只是一个日志标准，并不是日志系统的具体实现</strong><br>
+slf4j只做两件事：</p>
+<ul>
+<li>提供日志接口，用于写日志的方法</li>
+<li>提供获取具体日志对象的方法<br>
+slf4j-simple，logback-classic 都是slf4j的具体实现，log4j并不是直接是实现slf4j，但是有专门的一层桥接 slf4j-log4j12 来实现 slf4j。</li>
+</ul>
+<h3 id="slf4j-应用举例">slf4j 应用举例</h3>
+<p>pom.xml</p>
+<pre><code>&lt;!-- 原文：五月的仓颉http://www.cnblogs.com/xrq730/p/8619156.html --&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+      &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+      &lt;groupId&gt;org.xrq.log&lt;/groupId&gt;
+      &lt;artifactId&gt;log-test&lt;/artifactId&gt;
+      &lt;version&gt;1.0.0&lt;/version&gt;
+      &lt;packaging&gt;jar&lt;/packaging&gt;
+
+      &lt;name&gt;log-test&lt;/name&gt;
+      &lt;url&gt;http://maven.apache.org&lt;/url&gt;
+
+      &lt;properties&gt;
+        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+      &lt;/properties&gt;
+
+      &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+              &lt;artifactId&gt;junit&lt;/artifactId&gt;
+              &lt;version&gt;4.11&lt;/version&gt;
+              &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+            &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+            &lt;version&gt;1.7.25&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+            &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+            &lt;version&gt;1.2.3&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+            &lt;artifactId&gt;slf4j-simple&lt;/artifactId&gt;
+            &lt;version&gt;1.7.25&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;log4j&lt;/groupId&gt;
+            &lt;artifactId&gt;log4j&lt;/artifactId&gt;
+            &lt;version&gt;1.2.17&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+            &lt;artifactId&gt;slf4j-log4j12&lt;/artifactId&gt;
+            &lt;version&gt;1.7.21&lt;/version&gt;
+        &lt;/dependency&gt;
+      &lt;/dependencies&gt;
+&lt;/project&gt;
+</code></pre>
+<p>java 代码：</p>
+<pre><code>@Test
+public void testSlf4j() {
+      Logger logger = LoggerFactory.getLogger(Object.class);
+      logger.error(&quot;123&quot;);
+ }
+</code></pre>
+<p>接着我们首先把上面pom.xml的第30行~第49行注释掉，即不引入任何slf4j的实现类，运行Test方法，我们看一下控制台的输出为：</p>
+<figure data-type="image" tabindex="1"><img src="http://blog.801314.top/post-images/1591177390542.jpg" alt="" loading="lazy"></figure>
+<p>看到没有任何日志的输出，这验证了我们的观点：slf4j不提供日志的具体实现，只有slf4j是无法打印日志的。</p>
+<p>接着打开logback-classic的注释，运行Test方法，我们看一下控制台的输出为：</p>
+<figure data-type="image" tabindex="2"><img src="http://blog.801314.top/post-images/1591177405976.jpg" alt="" loading="lazy"></figure>
+<p>看到我们只要引入了一个slf4j的具体实现类，即可使用该日志框架输出日志。</p>
+<p>最后做一个测验，我们把所有日志打开，引入logback-classic、slf4j-simple、log4j，运行Test方法，控制台输出为：</p>
+<figure data-type="image" tabindex="3"><img src="http://blog.801314.top/post-images/1591177422719.jpg" alt="" loading="lazy"></figure>
+<p>和上面的差别是，可以输出日志，但是会输出一些告警日志，提示我们同时引入了多个slf4j的实现，然后选择其中的一个作为我们使用的日志系统。</p>
+<p>从例子我们可以得出一个重要的结论，即slf4j的作用：只要所有代码都使用门面对象slf4j，我们就不需要关心其具体实现，最终所有地方使用一种具体实现即可，更换、维护都非常方便。</p>
+<h3 id="slf4j实现原理">slf4j实现原理</h3>
+<p>上面看了slf4j的示例，下面研究一下slf4j的实现，我们只关注重点代码。</p>
+<p>slf4j的用法就是常年不变的一句&quot;Logger logger = LoggerFactory.getLogger(Object.class);&quot;，可见这里就是通过LoggerFactory去拿slf4j提供的一个Logger接口的具体实现而已，LoggerFactory的getLogger的方法实现为：</p>
+<pre><code> 1 public static Logger getLogger(Class&lt;?&gt; clazz) {
+ 2     Logger logger = getLogger(clazz.getName());
+ 3     if (DETECT_LOGGER_NAME_MISMATCH) {
+ 4         Class&lt;?&gt; autoComputedCallingClass = Util.getCallingClass();
+ 5         if (autoComputedCallingClass != null &amp;&amp; nonMatchingClasses(clazz, autoComputedCallingClass)) {
+ 6             Util.report(String.format(&quot;Detected logger name mismatch. Given name: \&quot;%s\&quot;; computed name: \&quot;%s\&quot;.&quot;, logger.getName(),
+ 7                             autoComputedCallingClass.getName()));
+ 8             Util.report(&quot;See &quot; + LOGGER_NAME_MISMATCH_URL + &quot; for an explanation&quot;);
+ 9         }
+10     }
+11     return logger;
+12 }
+</code></pre>
+<p>从第2行开始跟代码，一直跟到LoggerFactory的bind()方法：</p>
+<pre><code> 1 private final static void bind() {
+ 2     try {
+ 3         Set&lt;URL&gt; staticLoggerBinderPathSet = null;
+ 4         // skip check under android, see also
+ 5         // http://jira.qos.ch/browse/SLF4J-328
+ 6         if (!isAndroid()) {
+ 7             staticLoggerBinderPathSet = findPossibleStaticLoggerBinderPathSet();
+ 8             reportMultipleBindingAmbiguity(staticLoggerBinderPathSet);
+ 9         }
+10         // the next line does the binding
+11         StaticLoggerBinder.getSingleton();
+12         INITIALIZATION_STATE = SUCCESSFUL_INITIALIZATION;
+13         reportActualBinding(staticLoggerBinderPathSet);
+14         fixSubstituteLoggers();
+15         replayEvents();
+16         // release all resources in SUBST_FACTORY
+17         SUBST_FACTORY.clear();
+18     } catch (NoClassDefFoundError ncde) {
+19         String msg = ncde.getMessage();
+20         if (messageContainsOrgSlf4jImplStaticLoggerBinder(msg)) {
+21             INITIALIZATION_STATE = NOP_FALLBACK_INITIALIZATION;
+22             Util.report(&quot;Failed to load class \&quot;org.slf4j.impl.StaticLoggerBinder\&quot;.&quot;);
+23             Util.report(&quot;Defaulting to no-operation (NOP) logger implementation&quot;);
+24             Util.report(&quot;See &quot; + NO_STATICLOGGERBINDER_URL + &quot; for further details.&quot;);
+25         } else {
+26             failedBinding(ncde);
+27             throw ncde;
+28         }
+29     } catch (java.lang.NoSuchMethodError nsme) {
+30         String msg = nsme.getMessage();
+31         if (msg != null &amp;&amp; msg.contains(&quot;org.slf4j.impl.StaticLoggerBinder.getSingleton()&quot;)) {
+32             INITIALIZATION_STATE = FAILED_INITIALIZATION;
+33             Util.report(&quot;slf4j-api 1.6.x (or later) is incompatible with this binding.&quot;);
+34             Util.report(&quot;Your binding is version 1.5.5 or earlier.&quot;);
+35             Util.report(&quot;Upgrade your binding to version 1.6.x.&quot;);
+36         }
+37         throw nsme;
+38     } catch (Exception e) {
+39         failedBinding(e);
+40         throw new IllegalStateException(&quot;Unexpected initialization failure&quot;, e);
+41     }
+42 }
+</code></pre>
+<p>这个地方第7行是一个关键，看一下代码：</p>
+<pre><code> 1 static Set&lt;URL&gt; findPossibleStaticLoggerBinderPathSet() {
+ 2     // use Set instead of list in order to deal with bug #138
+ 3     // LinkedHashSet appropriate here because it preserves insertion order
+ 4     // during iteration
+ 5     Set&lt;URL&gt; staticLoggerBinderPathSet = new LinkedHashSet&lt;URL&gt;();
+ 6     try {
+ 7         ClassLoader loggerFactoryClassLoader = LoggerFactory.class.getClassLoader();
+ 8         Enumeration&lt;URL&gt; paths;
+ 9         if (loggerFactoryClassLoader == null) {
+10             paths = ClassLoader.getSystemResources(STATIC_LOGGER_BINDER_PATH);
+11         } else {
+12             paths = loggerFactoryClassLoader.getResources(STATIC_LOGGER_BINDER_PATH);
+13         }
+14         while (paths.hasMoreElements()) {
+15             URL path = paths.nextElement();
+16             staticLoggerBinderPathSet.add(path);
+17         }
+18     } catch (IOException ioe) {
+19         Util.report(&quot;Error getting resources from path&quot;, ioe);
+20     }
+21     return staticLoggerBinderPathSet;
+22 }
+</code></pre>
+<p>这个地方重点其实就是第12行的代码，getLogger的时候会去classpath下找STATIC_LOGGER_BINDER_PATH，STATIC_LOGGER_BINDER_PATH值为&quot;org/slf4j/impl/StaticLoggerBinder.class&quot;，即所有slf4j的实现，在提供的jar包路径下，一定是有&quot;org/slf4j/impl/StaticLoggerBinder.class&quot;存在的，我们可以看一下：<br>
+<img src="http://blog.801314.top/post-images/1591177466848.jpg" alt="" loading="lazy"><br>
+我们不能避免在系统中同时引入多个slf4j的实现，所以接收的地方是一个Set。大家应该注意到，上部分在演示同时引入logback、slf4j-simple、log4j的时候会有警告：<br>
+<img src="http://blog.801314.top/post-images/1591177481173.jpg" alt="" loading="lazy"><br>
+这就是因为有三个&quot;org/slf4j/impl/StaticLoggerBinder.class&quot;存在的原因，此时reportMultipleBindingAmbiguity方法控制台输出语句：</p>
+<pre><code>1 private static void reportMultipleBindingAmbiguity(Set&lt;URL&gt; binderPathSet) {
+2     if (isAmbiguousStaticLoggerBinderPathSet(binderPathSet)) {
+3         Util.report(&quot;Class path contains multiple SLF4J bindings.&quot;);
+4         for (URL path : binderPathSet) {
+5             Util.report(&quot;Found binding in [&quot; + path + &quot;]&quot;);
+6         }
+7         Util.report(&quot;See &quot; + MULTIPLE_BINDINGS_URL + &quot; for an explanation.&quot;);
+8     }
+9 }
+</code></pre>
+<p>那网友朋友可能会问，同时存在三个&quot;org/slf4j/impl/StaticLoggerBinder.class&quot;怎么办？首先确定的是这不会导致启动报错，其次在这种情况下编译期间，编译器会选择其中一个StaticLoggerBinder.class进行绑定，这个地方sfl4j也在reportActualBinding方法中报告了绑定的是哪个日志框架：</p>
+<pre><code>1 private static void reportActualBinding(Set&lt;URL&gt; binderPathSet) {
+2     // binderPathSet can be null under Android
+3     if (binderPathSet != null &amp;&amp; isAmbiguousStaticLoggerBinderPathSet(binderPathSet)) {
+4         Util.report(&quot;Actual binding is of type [&quot; + StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr() + &quot;]&quot;);
+5     }
+6 }
+</code></pre>
+<p>对照上面的截图，看最后一行，确实是&quot;Actual binding is of type...&quot;这句。</p>
+<p>最后StaticLoggerBinder就比较简单了，不同的StaticLoggerBinder其getLoggerFactory实现不同，拿到ILoggerFactory之后调用一下getLogger即拿到了具体的Logger，可以使用Logger进行日志输出。</p>
+
+                          </div>
+                        </div>
+                        <div class="layout-post-social">
+                          <div class="item reader">
+                            <div id="/post/slf4j-zuo-yong-ji-qi-shi-xian-yuan-li/" class="leancloud-visitors view"
+                              data-flag-title="SLF4J 作用及其实现原理">
+                              <span class="post-meta-item-text">阅读 </span>
+                              <span class="leancloud-visitors-count"></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="layout-post-navigation">
+                          <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="http://blog.801314.top/post/ri-zhi-kuang-jia-zheng-li-logback/" class="title">
+                                      <h4>日志框架整理--logback</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2020-06-02</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+                            
+                          </div>
+                        </div>
+
+                        <div class="layout-comments"></div>
+                        
+                        <script type="text/javascript" src='http://blog.801314.top/media/scripts/zan.js'></script>
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/av-min.js'></script>
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/Valine.min.js'></script>
+
+<script>
+  var valine = new Valine();
+  valine.init({
+    el: '.layout-comments',
+    appId: 'zF1TA09DTcGGHk6VGTJsez35-gzGzoHsz',
+    appKey: '8agqkoocVd5mVgPbpjNqTKYx',
+    notify: false,
+    verify: false,
+    visitor: true,
+    avatar: 'mp',
+    placeholder: '加入讨论...'
+  })
+</script>
+                        
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2 d-none d-lg-block">
+                      <div class="layout-post-sidebar">
+                        <div class="layout-sidebar-item">
+                          <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E7%AE%80%E5%8D%95%E5%9B%9E%E9%A1%BE%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F">简单回顾门面模式</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8slf4j">为什么使用slf4j</a></li>
+<li><a href="#slf4j-%E5%BA%94%E7%94%A8%E4%B8%BE%E4%BE%8B">slf4j 应用举例</a></li>
+<li><a href="#slf4j%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86">slf4j实现原理</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-totop d-none"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+
+    	<div class="layout-footer">
+
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+					<div class="footer">
+						<div class="row">
+							<div class="col-12 col-md-9">
+								<div class="footer-copy">
+									
+									<span>© 2020.5.16 </span>
+									<a href="http://blog.801314.top" title="黑白杂色">黑白杂色</a>
+									<span class="px-2">⋅</span>
+									
+									Powered by <a href="https://github.com/getgridea/gridea" target="_blank">blackWhite</a>
+									<div class="footer-icp d-none d-sm-inline-block">
+										<span class="px-2">⋅</span>
+										
+										<a href="http://www.beian.miit.gov.cn" target="_blank">没有绝对的纯，黑白也是杂色 </a>
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 d-none d-md-block">
+								<div class="footer-links">
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="807727909" target="_blank">
+											<i class="fa fa-qq" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="https://weibo.com/p/1005053905393397/home?from=page_100505&amp;mod=TAB&amp;is_all=1#place" target="_blank">
+											<i class="fa fa-weibo" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="yue142556" target="_blank">
+											<i class="fa fa-weixin" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript" src='http://blog.801314.top/media/scripts/main.js'></script>
+	
+
+  </div>
+</body>
+
+</html>
