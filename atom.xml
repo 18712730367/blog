@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://blog.801314.top</id>
     <title>黑白杂色</title>
-    <updated>2020-06-01T08:05:58.217Z</updated>
+    <updated>2020-06-03T07:59:37.636Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://blog.801314.top"/>
     <link rel="self" href="http://blog.801314.top/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>http://blog.801314.top/images/avatar.png</logo>
     <icon>http://blog.801314.top/favicon.ico</icon>
     <rights>All rights reserved 2020, 黑白杂色</rights>
+    <entry>
+        <title type="html"><![CDATA[日志框架整理--logback]]></title>
+        <id>http://blog.801314.top/post/ri-zhi-kuang-jia-zheng-li-logback/</id>
+        <link href="http://blog.801314.top/post/ri-zhi-kuang-jia-zheng-li-logback/">
+        </link>
+        <updated>2020-06-02T07:37:19.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Java 泛型详解]]></title>
         <id>http://blog.801314.top/post/java-fan-xing-xiang-jie/</id>
@@ -44,12 +51,5 @@
         <link href="http://blog.801314.top/post/java-du-qu-wen-jian-wan-zheng-ban/">
         </link>
         <updated>2020-05-29T03:10:01.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[索引的作用]]></title>
-        <id>http://blog.801314.top/post/suo-yin-de-zuo-yong/</id>
-        <link href="http://blog.801314.top/post/suo-yin-de-zuo-yong/">
-        </link>
-        <updated>2020-05-25T07:38:25.000Z</updated>
     </entry>
 </feed>

@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+<title>日志框架整理--logback - 黑白杂色</title>
+<meta name="description" content="没有绝对的纯，黑白也是杂色">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type='text/css' rel='stylesheet' href='http://blog.801314.top/styles/main.css' media='screen' />
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css">
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/jquery.js'></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+  <div class="layout theme-dark">
+    <div class="layout-header">
+
+	<div class="layout-header-main">
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+
+					<div class="navbar">
+
+						<div class="logo">
+							<a href="http://blog.801314.top">
+								<img class="logo"
+									src="http://blog.801314.top/media/images/site_avatar.png?v=1591171173724"
+									alt="">
+							</a>
+						</div>
+
+						<div class="menu d-md-inline-block d-none">
+							<ul class="layout-navigation-list">
+								
+								<li class="layout-navigation-item"><a title="主页"
+										href="/">主页</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="历史文章"
+										href="/archives">历史文章</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="文章分类"
+										href="/tags">文章分类</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="联系我"
+										href="http://blog.801314.top/post/zuo-zhe">联系我</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="item d-md-inline-block d-none">
+							<div class="search-icon">
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</div>
+						</div>
+
+
+
+						<div class="d-md-inline-block d-none">
+							<div class="search-lightbox">
+								<div class="search-body">
+
+									<form id="gridea-search-form" data-update="1591171173724" action="/search/" class="search-form">
+										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
+										<button type="submit" class="submit" aria-label="Submit">
+											<i class="fa fa-search" aria-hidden="true"></i>
+										</button>
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="nav d-md-none d-inline-block">
+							<div class="trigger">
+								<i class="fa fa-bars layout-btn-toggle" aria-hidden="true"></i>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+
+
+
+		</div>
+	</div>
+
+</div>
+    <div class="layout-collapse d-md-none">
+	<div class="layout-collapse-main">
+		<ul class="layout-collapse-list">
+			
+			<li class="layout-collapse-item"><a title="主页" href="/">主页</a></li>
+			
+			<li class="layout-collapse-item"><a title="历史文章" href="/archives">历史文章</a></li>
+			
+			<li class="layout-collapse-item"><a title="文章分类" href="/tags">文章分类</a></li>
+			
+			<li class="layout-collapse-item"><a title="联系我" href="http://blog.801314.top/post/zuo-zhe">联系我</a></li>
+			
+
+		</ul>
+	</div>
+</div>
+
+    <div class="layout-content">
+      <div class="layout-content-main">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-12 col-lg-9">
+              <div class="layout-post">
+                <div class="layout-post-body">
+                  <div class="row">
+
+                    <div class="col-12 col-lg-10">
+                      <div class="layout-post-main m-right m-md-right">
+                        <div class="layout-post-header">
+                          <h1 class="layout-post-title">日志框架整理--logback</h1>
+                          <div class="layout-post-meta">
+                            <div class="item">
+                               <a href="http://blog.801314.top/tag/T0c94ZAAe/" class="post--keyword"
+                                data-title="java-日志" data-type="post_tag" data-term-id="39">java-日志</a>
+                              
+                            </div>
+                            <div class="item">
+                              <span>2020-06-02</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="layout-post-content">
+                          <div class="layout-post-item">
+                            
+                            <p>logback是有log4j 创始人设计的又一个开源日志框架<br>
+logback 当前分为三个模块：logbakc-core，logback-classic 和 logback-access</p>
+<ul>
+<li>logback-core：是其他两个模块的基础模块</li>
+<li>logback-classic：是log4j的一个改良版本。此外logback-classic 完整实现SLF4J API，所以可以很方便的更换成其他日志系统，如 log4j 或 JDK14 Logging</li>
+<li>logback-access：访问模块与Servlet容器基础，提供通过http访问日志的功能。</li>
+</ul>
+<p>maven：</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+    &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+    &lt;version&gt;1.7.7&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+    &lt;artifactId&gt;logback-core&lt;/artifactId&gt;
+    &lt;version&gt;1.1.7&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+    &lt;artifactId&gt;logback-access&lt;/artifactId&gt;
+    &lt;version&gt;1.1.7&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+    &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+    &lt;version&gt;1.1.7&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>logback, 一个“通用，可靠，快速又灵活的Java日志框架”</p>
+<p>在src目录下建立logback.xml<br>
+logback查找顺序：</p>
+<ol>
+<li>首先会试着查找logback.groovy文件</li>
+<li>当没有找到时，继续试着查找 logback-test.xml 文件</li>
+<li>当没有找到时，继续试着查找 logback.xml 文件</li>
+<li>如果仍然没有找到，则使用默认配置（打印到控制台）</li>
+</ol>
+<h3 id="自定义日志配置">自定义日志配置</h3>
+<p>根据不同的日志系统，可以按照如下规则组织配置文件名，就可以被正确加载：<br>
+Logback：logback-spring.xml，logback-spring.groovy,logback.xml,logback.groovy<br>
+Log4j: log4J-spring.properties, log4j-spring.xml, log4j.properties, log4j.xml<br>
+Log4j2: log4j2-spring.xml, log4j2.xml<br>
+JDK(Java Util Logging): logging.properties</p>
+<p>Spring Boot 官方推荐优先使用带有-spring的文件名作为你的日志配置（如使用logback-spring.xml，而不是logback.xml), 命名为logback-spring.xml 的日志配置文件，spring boot 可以为它添加一些spring boot特有的配置项。<br>
+默认的命名规则，并且放在 src/main/resources 下面即可</p>
+<p>如果你不想用 logback.xml 作为 logback 配置的名字，application.yml 可以通过 logging.config 属性指定自定义的名字：<br>
+<code>logging.config=classpath:logging-config.xml</code><br>
+虽然一般并不需要改变配置文件的名字，但是如果你想针对不同运行是profile使用不同的配置，这个功能会很有用。<br>
+一般不需要这个属性，而是直接在 logback-spring.xml 中使用 springProfile配置，不需要logging.config 指定不同环境使用不同配置文件。</p>
+<p>上代码：</p>
+<pre><code>package logback;  
+  
+import org.slf4j.Logger;  
+import org.slf4j.LoggerFactory;  
+  
+public class LogbackDemo {  
+    private static Logger log = LoggerFactory.getLogger(LogbackDemo.class);  
+    public static void main(String[] args) {  
+        log.trace(&quot;======trace&quot;);  
+        log.debug(&quot;======debug&quot;);  
+        log.info(&quot;======info&quot;);  
+        log.warn(&quot;======warn&quot;);  
+        log.error(&quot;======error&quot;);  
+           
+        String name = &quot;Aub&quot;;  
+        String message = &quot;3Q&quot;;  
+        String[] fruits = { &quot;apple&quot;, &quot;banana&quot; };  
+          
+        // logback提供的可以使用变量的打印方式，结果为&quot;Hello,Aub!&quot;  
+        log.info(&quot;Hello,{}!&quot;, name);  
+          
+        // 可以有多个参数,结果为“Hello,Aub! 3Q!”  
+        log.info(&quot;Hello,{}!   {}!&quot;, name, message);  
+          
+        // 可以传入一个数组，结果为&quot;Fruit:  apple,banana&quot;  
+        log.info(&quot;Fruit:  {},{}&quot;, fruits);   
+    }  
+}  
+</code></pre>
+<h3 id="configuration">configuration</h3>
+<ol>
+<li>根节点 configuration 包含的属性：</li>
+</ol>
+<ul>
+<li>scan:<br>
+此属性设置为true，配置文件如果发生改变，将会被重新加载，默认为true</li>
+<li>scanPeriod:<br>
+设置监测配置文件是否有修改的时间间隔，如果没有给出事件单位，默认单位是毫秒。当scan为true时，此属性默认生效。默认的时间将为1分钟。</li>
+<li>debug：<br>
+此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认为false。<br>
+例如：</li>
+</ul>
+<pre><code>&lt;configuration scan=&quot;true&quot; scanPeriod=&quot;60 seconds&quot; debug=&quot;false&quot;&gt;  
+      &lt;!-- 其他配置省略--&gt;  
+&lt;/configuration&gt;  
+</code></pre>
+<ol start="2">
+<li>根节点 configuration 的子节点：</li>
+</ol>
+<ul>
+<li>contextName<br>
+每个logger都关联到logger上下文，默认上下文名称为“default”。但可以使用<contextName>设置成其他名字，用于区分不同应用程序的记录。一旦设置，不能修改。可以通过%contextName来打印日志上下文名称，一般来说我们不用这个属性，可有可无.<br>
+例如：</li>
+</ul>
+<pre><code>&lt;configuration scan=&quot;true&quot; scanPeriod=&quot;60 seconds&quot; debug=&quot;false&quot;&gt;  
+      &lt;contextName&gt;myAppName&lt;/contextName&gt;  
+      &lt;!-- 其他配置省略--&gt;  
+&lt;/configuration&gt; 
+</code></pre>
+<ul>
+<li>property<br>
+用来定义变量值的标签，property 有两个属性，name和value；通过property定义的值会被插入到 logger上下文中。定义变量后，可以使用 ${} l来使用变量。<br>
+例如：</li>
+</ul>
+<pre><code>&lt;configuration scan=&quot;true&quot; scanPeriod=&quot;60 seconds&quot; debug=&quot;false&quot;&gt;  
+      &lt;property name=&quot;APP_Name&quot; value=&quot;myAppName&quot; /&gt;   
+      &lt;contextName&gt;${APP_Name}&lt;/contextName&gt;  
+      &lt;!-- 其他配置省略--&gt;  
+&lt;!-- 系统日志输出 --&gt;
+	&lt;appender name=&quot;file&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+		&lt;file&gt;${APP_Name}/boss.log&lt;/file&gt;
+		&lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+			&lt;!-- 按天回滚 daily --&gt;
+			&lt;fileNamePattern&gt;${APP_Name}/boss.%d{yyyy-MM-dd}.log&lt;/fileNamePattern&gt;
+			&lt;!-- 日志最大的历史 30天 --&gt;
+			&lt;maxHistory&gt;60&lt;/maxHistory&gt;
+			&lt;!--用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志--&gt;
+			&lt;!--&lt;totalSizeCap&gt;1GB&lt;/totalSizeCap&gt;--&gt;
+		&lt;/rollingPolicy&gt;
+		&lt;encoder&gt;
+			&lt;pattern&gt;%d{HH:mm:ss.SSS} [%thread] %-5level %logger{80} - %msg%n&lt;/pattern&gt;
+		&lt;/encoder&gt;
+	&lt;/appender&gt;
+&lt;/configuration&gt; 
+</code></pre>
+<ul>
+<li>timestamp<br>
+两个属性：
+<ul>
+<li>key：标识此 timestamp 的名字</li>
+<li>datePattern： 设置将当前时间转换为字符串的模式，遵循 java.txt.SimpleDateFormat 的格式。<br>
+例如：</li>
+</ul>
+</li>
+</ul>
+<pre><code>&lt;configuration scan=&quot;true&quot; scanPeriod=&quot;60 seconds&quot; debug=&quot;false&quot;&gt;  
+      &lt;timestamp key=&quot;bySecond&quot; datePattern=&quot;yyyyMMdd'T'HHmmss&quot;/&gt;   
+      &lt;contextName&gt;${bySecond}&lt;/contextName&gt;  
+      &lt;!-- 其他配置省略--&gt;  
+&lt;/configuration&gt;
+</code></pre>
+<ul>
+<li>logger<br>
+用来设置某一个包或者具体的某一个类的日志打印级别，以及指定 appender.<br>
+包含的属性：
+<ul>
+<li>name：<br>
+用来指定受此logger约束的某一个包或者具体的某一个类。</li>
+<li>level：<br>
+用来设置打印级别，大小写无关：TRACE，DEBUG，INFO，WARN，ERROR，ALL和OFF，还有一个特殊值 INHERITED 或者同义词NULL，代码强制执行上级的级别。<br>
+如果未设置此属性，那么当前logger将会继承上级的打印级别。</li>
+<li>additivity：<br>
+是否向上级logger传递打印信息。默认是true。<br>
+logger可以包含零个或多个 appender-ref 元素，标识这个 appender 将会添加到这个 lgger</li>
+</ul>
+</li>
+<li>root<br>
+也是logger元素，但是它是根logger。只有一个level属性，因为已经被命名为“root”
+<ul>
+<li>level<br>
+用来设置打印级别，大小写无关，默认是debug<br>
+root 可以包含多个 appender-ref 元素，标识这个appender将会添加到这个 logger<br>
+例如：</li>
+</ul>
+</li>
+</ul>
+<pre><code>package logback;  
+  
+import org.slf4j.Logger;  
+import org.slf4j.LoggerFactory;  
+  
+public class LogbackDemo {  
+    private static Logger log = LoggerFactory.getLogger(LogbackDemo.class);  
+    public static void main(String[] args) {  
+        log.trace(&quot;======trace&quot;);  
+        log.debug(&quot;======debug&quot;);  
+        log.info(&quot;======info&quot;);  
+        log.warn(&quot;======warn&quot;);  
+        log.error(&quot;======error&quot;);  
+    }  
+}  
+</code></pre>
+<p>logback.xml 配置文件：</p>
+<pre><code>&lt;configuration&gt;   
+   &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;   
+    &lt;!-- encoder 默认配置为PatternLayoutEncoder --&gt;   
+    &lt;encoder&gt;   
+      &lt;pattern&gt;%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n&lt;/pattern&gt;   
+    &lt;/encoder&gt;   
+  &lt;/appender&gt;   
+   
+  &lt;!-- logback为java中的包 --&gt;   
+  &lt;logger name=&quot;logback&quot;/&gt;   
+  &lt;!--logback.LogbackDemo：类的全路径 --&gt;   
+  &lt;logger name=&quot;logback.LogbackDemo&quot; level=&quot;INFO&quot; additivity=&quot;false&quot;&gt;  
+    &lt;appender-ref ref=&quot;STDOUT&quot;/&gt;  
+  &lt;/logger&gt;   
+    
+  &lt;root level=&quot;ERROR&quot;&gt;             
+    &lt;appender-ref ref=&quot;STDOUT&quot; /&gt;   
+  &lt;/root&gt;     
+&lt;/configuration&gt;  
+</code></pre>
+<h3 id="appender">appender</h3>
+<pre><code>是 configuration的子节点，是负责写日志的组件
+有两个必要属性：
+* name： 指定appender的名称
+* calss：指定appender的全限定名
+</code></pre>
+<ol>
+<li>ConsoleAppender：<br>
+把日志添加到控制台，子节点：
+<ul>
+<li>encoder： 对日照进行格式化</li>
+<li>target：字符串 System.out 或者 System.err, 默认System.out<br>
+例如：</li>
+</ul>
+</li>
+</ol>
+<pre><code>&lt;configuration&gt;  
+  
+  &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;  
+    &lt;encoder&gt;  
+      &lt;pattern&gt;%-4relative [%thread] %-5level %logger{35} - %msg %n&lt;/pattern&gt;  
+    &lt;/encoder&gt;  
+  &lt;/appender&gt;  
+  
+  &lt;root level=&quot;DEBUG&quot;&gt;  
+    &lt;appender-ref ref=&quot;STDOUT&quot; /&gt;  
+  &lt;/root&gt;  
+&lt;/configuration&gt;  
+</code></pre>
+<ol start="2">
+<li>FileAppender<br>
+把日志添加到文件，子节点：
+<ul>
+<li>file: 被写入的文件名，可以是相对目录，也可以说是绝对目录，如果上级目录不存在会自动创建，没有默认值</li>
+<li>append：如果是true，日志被追加到文件结尾，如果是false，清空现存文件，默认是true。</li>
+<li>encoder：对记录时间进行格式化</li>
+<li>prudent：如果是true，日志会被安全的写入文件，即使其他的FileAppender也在此文件做写入操作，效率低，默认是false。<br>
+例如：</li>
+</ul>
+</li>
+</ol>
+<pre><code>&lt;configuration&gt;  
+  
+  &lt;appender name=&quot;FILE&quot; class=&quot;ch.qos.logback.core.FileAppender&quot;&gt;  
+    &lt;file&gt;testFile.log&lt;/file&gt;  
+    &lt;append&gt;true&lt;/append&gt;  
+    &lt;encoder&gt;  
+      &lt;pattern&gt;%-4relative [%thread] %-5level %logger{35} - %msg%n&lt;/pattern&gt;  
+    &lt;/encoder&gt;  
+  &lt;/appender&gt;  
+          
+  &lt;root level=&quot;DEBUG&quot;&gt;  
+    &lt;appender-ref ref=&quot;FILE&quot; /&gt;  
+  &lt;/root&gt;  
+&lt;/configuration&gt;
+</code></pre>
+<ol start="3">
+<li>
+<p>RollingFileAppender:<br>
+滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他问题。<br>
+子节点：</p>
+<ul>
+<li>file：被写入的文件名，可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建，没有默认值。</li>
+<li>append：如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true。</li>
+<li>encoder：对记录事件进行格式化。</li>
+<li>rollingPolicy: 当发生滚动时，决定RollingFileAppender的行为，涉及文件移动和重命名。</li>
+<li>triggeringPolicy：告知 RollingFileAppender 何时激活滚动</li>
+<li>prudent: 当为true时，不支持FixedWindowRollingPolicy. 支持 TimeBasedRollingPolicy，但是有两个限制：1. 不支持也不允许文件压缩；2：不能设置file属性，必须留空。</li>
+</ul>
+<p>rollingPolicy：</p>
+<ul>
+<li>TimeBasedRollingPolicy<br>
+最常用的滚动策略，它根据实际来制定滚动策略，既负责滚动，也负责触发滚动。子节点：
+<ul>
+<li>fileNamePattern<br>
+必要节点，包含文件名及%d 转换符。%d 可以包含一个 java.text.SimpleDateFormat制定的时间格式，如&quot; %d{yyyy-MM} 。如果直接使用%d，默认格式是 yyyy-MM-dd。RollingFileAppender 的file子节点可有可无，通过设置file，可以为活动文件和归档文件制定不同位置，当前日志总是极力到file指定的文件（活动文件），活动文件的名字不会改变；如果没设置file，活动文件的名字会根据 fileNamePattern 的值，每隔一段时间改变一次。&quot;/&quot; 或 &quot;&quot;会被当做目录分隔符。</li>
+<li>maxHistory<br>
+可选节点，控制保留的归档文件的最大数量，超出数量就删除文件。假设设置每个月滚动，且 maxHistory是6，则只保存最近6个月的文件，删除之前的旧文件。注意，删除旧文件，那些为了归档而创建的目录也会被删除。关于保存的时间的单位，是根据时间格式的单位。</li>
+</ul>
+</li>
+<li>FixedWindowRollingPolicy<br>
+根据固定窗口算法重命名文件的滚动策略。子节点：
+<ul>
+<li>minIndex： 窗口索引最小值</li>
+<li>maxIndex：窗口索引最大值，当用户指定的窗口过大时，会自动将窗口设置为12</li>
+<li>fileNamePattern：必须包含 %i。例如，假设最小值和最大值分别为1和2，命名模式为 mylog%i.log，会产生归档文件mylog1.log 和 mylog2.log。还可以指定文件压缩选项，例如，mylog%i.log.gz 或者 mylog%i.log.zip。</li>
+</ul>
+</li>
+</ul>
+<p>triggeringPolicy:<br>
+* SizeBasedTriggeringPolicy<br>
+查看当前活动文件的大小，如果超过指定大小会告知RollingFileAppender 触发当前活动文件滚动。只有一个节点：<br>
+* maxFileSize：活动文件的大小，默认值是10MB</p>
+</li>
+</ol>
+<p>例如：<br>
+每天生产一个日志文件，保存30天的日志</p>
+<pre><code>&lt;configuration&gt;   
+  &lt;appender name=&quot;FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;   
+      
+    &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;   
+      &lt;fileNamePattern&gt;logFile.%d{yyyy-MM-dd}.log&lt;/fileNamePattern&gt;   
+      &lt;maxHistory&gt;30&lt;/maxHistory&gt;    
+    &lt;/rollingPolicy&gt;   
+   
+    &lt;encoder&gt;   
+      &lt;pattern&gt;%-4relative [%thread] %-5level %logger{35} - %msg%n&lt;/pattern&gt;   
+    &lt;/encoder&gt;   
+  &lt;/appender&gt;    
+   
+  &lt;root level=&quot;DEBUG&quot;&gt;   
+    &lt;appender-ref ref=&quot;FILE&quot; /&gt;   
+  &lt;/root&gt;   
+&lt;/configuration&gt;  
+</code></pre>
+<p>例如：<br>
+按照固定窗口模式生产日志文件，当文件大于20MB时，生产新的日志文件。窗口大小1到3，当保存了3个归档文件后，将覆盖最早的日志。</p>
+<pre><code>&lt;configuration&gt;   
+  &lt;appender name=&quot;FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;   
+    &lt;file&gt;test.log&lt;/file&gt;   
+   
+    &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.FixedWindowRollingPolicy&quot;&gt;   
+      &lt;fileNamePattern&gt;tests.%i.log.gz&lt;/fileNamePattern&gt;   
+      &lt;minIndex&gt;1&lt;/minIndex&gt;   
+      &lt;maxIndex&gt;3&lt;/maxIndex&gt;   
+    &lt;/rollingPolicy&gt;   
+   
+    &lt;triggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy&quot;&gt;   
+      &lt;maxFileSize&gt;20MB&lt;/maxFileSize&gt;   
+    &lt;/triggeringPolicy&gt;   
+    &lt;encoder&gt;   
+      &lt;pattern&gt;%-4relative [%thread] %-5level %logger{35} - %msg%n&lt;/pattern&gt;   
+    &lt;/encoder&gt;   
+  &lt;/appender&gt;   
+           
+  &lt;root level=&quot;DEBUG&quot;&gt;   
+    &lt;appender-ref ref=&quot;FILE&quot; /&gt;   
+  &lt;/root&gt;   
+&lt;/configuration&gt;  
+</code></pre>
+<p>另外，还是SocketAppender，SMTPAppender，DBAppender，SyslogAppender，SiftingAppender，并不常用。</p>
+<ul>
+<li>encoder<br>
+负责两件事，一是把日志信息转换成字节数组，二是把字节数组写入到输出流<br>
+目前 PatterLayoutEncoder 是唯一且有用的默认的 encoder，有一个节点pattern，用来设置日志的输入格式。<br>
+使用%加转换符的方式，如果要输出%，则必须用 \ 对 % 进行转义。</li>
+</ul>
+<p>例如：</p>
+<pre><code>&lt;encoder&gt;   
+   &lt;pattern&gt;%-4relative [%thread] %-5level %logger{35} - %msg%n&lt;/pattern&gt;   
+&lt;/encoder
+</code></pre>
+<ul>
+<li>
+<p>pattern 里转换符说明：</p>
+<ul>
+<li>
+<p>c {length } /lo {length } /logger {length }	<br>
+输出日志的logger名，可有一个整形参数，功能是缩短logger名，设置为0表示只输入logger最右边点符号之后的字符串。 Conversion specifier Logger name Result<br>
+%logger	mainPackage.sub.sample.Bar	mainPackage.sub.sample.Bar<br>
+%logger{0}	mainPackage.sub.sample.Bar	Bar<br>
+%logger{5}	mainPackage.sub.sample.Bar	m.s.s.Bar<br>
+%logger{10}	mainPackage.sub.sample.Bar	m.s.s.Bar<br>
+%logger{15}	mainPackage.sub.sample.Bar	m.s.sample.Bar<br>
+%logger{16}	mainPackage.sub.sample.Bar	m.sub.sample.Bar<br>
+%logger{26}	mainPackage.sub.sample.Bar	mainPackage.sub.sample.Bar</p>
+</li>
+<li>
+<p>C {length } /class {length }	<br>
+输出执行记录请求的调用者的全限定名。参数与上面的一样。尽量避免使用，除非执行速度不造成任何问题。</p>
+</li>
+<li>
+<p>contextName /cn	<br>
+输出上下文名称。</p>
+</li>
+<li>
+<p>d {pattern } /date {pattern }	<br>
+输出日志的打印日志，模式语法与java.text.SimpleDateFormat 兼容。 Conversion Pattern Result<br>
+%d	2006-10-20 14:06:49,812<br>
+%date	2006-10-20 14:06:49,812<br>
+%date{ISO8601}	2006-10-20 14:06:49,812<br>
+%date{HH:mm:ss.SSS}	14:06:49.812<br>
+%date{dd MMM yyyy ;HH:mm:ss.SSS}	20 oct. 2006;14:06:49.812</p>
+</li>
+<li>
+<p>F / file	<br>
+输出执行记录请求的java源文件名。尽量避免使用，除非执行速度不造成任何问题。</p>
+</li>
+<li>
+<p>caller{depth}caller{depth, evaluator-1, ... evaluator-n}	<br>
+输出生成日志的调用者的位置信息，整数选项表示输出信息深度。<br>
+例如， %caller{2}   输出为：</p>
+<p>0 [main] DEBUG - logging statement<br>
+Caller+0 at mainPackage.sub.sample.Bar.sampleMethodName(Bar.java:22)<br>
+Caller+1 at mainPackage.sub.sample.Bar.createLoggingRequest(Bar.java:17)<br>
+例如， %caller{3}   输出为：</p>
+<p>16 [main] DEBUG - logging statement<br>
+Caller+0 at mainPackage.sub.sample.Bar.sampleMethodName(Bar.java:22)<br>
+Caller+1 at mainPackage.sub.sample.Bar.createLoggingRequest(Bar.java:17)<br>
+Caller+2 at mainPackage.ConfigTester.main(ConfigTester.java:38)</p>
+</li>
+<li>
+<p>L / line	<br>
+输出执行日志请求的行号。尽量避免使用，除非执行速度不造成任何问题。</p>
+</li>
+<li>
+<p>m / msg / message	<br>
+输出应用程序提供的信息。</p>
+</li>
+<li>
+<p>M / method	<br>
+输出执行日志请求的方法名。尽量避免使用，除非执行速度不造成任何问题。</p>
+</li>
+<li>
+<p>n	<br>
+输出平台先关的分行符“\n”或者“\r\n”。</p>
+</li>
+<li>
+<p>p / le / level	<br>
+输出日志级别。</p>
+</li>
+<li>
+<p>r / relative	<br>
+输出从程序启动到创建日志记录的时间，单位是毫秒</p>
+</li>
+<li>
+<p>t / thread	<br>
+输出产生日志的线程名。</p>
+</li>
+<li>
+<p>replace(p ){r, t}	<br>
+p 为日志内容，r 是正则表达式，将p 中符合r 的内容替换为t 。<br>
+例如， &quot;%replace(%msg){'\s', ''}&quot;</p>
+</li>
+</ul>
+</li>
+<li>
+<p>格式修饰符，与转换符共同使用<br>
+可选的格式修饰符位于 % 和 转换符之间，<br>
+第一个可选修饰符是左对齐的标志，符号是减号“-”；接着是可选的最小宽度修饰符，用十进制数表示。如果字符小于最小宽度，则左填充或右填充，默认是左填充（即右对齐），填充符是空格。如果字符大于最小宽度，字符永远不会被截断。最大宽度修饰符，符号是点号&quot;.&quot;后面加十进制。如果字符大于最大宽度，则从前面截断。点符号&quot;.&quot;后面加减号“-”再加数字，表示从尾部截断。<br>
+例如：%-4relative 表示将输出从程序启动到创建日志记录的时间，进行左对齐，最小宽度为4.</p>
+</li>
+</ul>
+<h3 id="filter">filter</h3>
+<p>过滤器，执行一个过滤器会返回枚举值DENY，NEUTRAL，ACCEPT其中之一。</p>
+<ul>
+<li>返回DENY，日志将立即被抛弃而不再经过其他过滤器</li>
+<li>返回NEUTRAL，有序列表中的下个过滤器会接着处理日志</li>
+<li>返回ACCEPT，日志会被立即处理，不再经过剩余过滤器</li>
+</ul>
+<p>过滤器被添加到 Appender中，为Appender添加一个或夺欧冠过滤器后，可以用任意条件对日志进行过滤。Appender有多个过滤器时，安卓配置顺序执行。</p>
+<ul>
+<li>常用过滤器：
+<ol>
+<li>LevelFilter：级别过滤器，根据日志级别进行过滤。如果日志级别等于配置级别，过滤器会根据 onMatch 和 onMismatch 接收或拒绝日志。子节点：
+<ul>
+<li>level：设置过滤级别</li>
+<li>onMatch: 用于配置符合过滤条件的操作</li>
+<li>onMismatch：用于配置不符合过滤条件的操作<br>
+例如：将过滤器的日志级别配置为INFO，所以INFO级别的日志交给appender处理，非INFO级别的日志，被过滤掉。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code>&lt;configuration&gt;   
+  &lt;appender name=&quot;CONSOLE&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;   
+    &lt;filter class=&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&gt;   
+      &lt;level&gt;INFO&lt;/level&gt;   
+      &lt;onMatch&gt;ACCEPT&lt;/onMatch&gt;   
+      &lt;onMismatch&gt;DENY&lt;/onMismatch&gt;   
+    &lt;/filter&gt;   
+    &lt;encoder&gt;   
+      &lt;pattern&gt;   
+        %-4relative [%thread] %-5level %logger{30} - %msg%n   
+      &lt;/pattern&gt;   
+    &lt;/encoder&gt;   
+  &lt;/appender&gt;   
+  &lt;root level=&quot;DEBUG&quot;&gt;   
+    &lt;appender-ref ref=&quot;CONSOLE&quot; /&gt;   
+  &lt;/root&gt;   
+&lt;/configuration&gt;  
+</code></pre>
+<ol start="2">
+<li>ThresholdFilter<br>
+临界值过滤器，过滤掉低于指定临界值的日志。当日志级别高于或等于临界值时，过滤器返回NEUTRAL；当日志界别低于临界值时，日志会被拒绝。<br>
+例如：过滤掉所有低于INFO级别的日志。</li>
+</ol>
+<pre><code>&lt;configuration&gt;   
+  &lt;appender name=&quot;CONSOLE&quot;   
+    class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;   
+    &lt;!-- 过滤掉 TRACE 和 DEBUG 级别的日志--&gt;   
+    &lt;filter class=&quot;ch.qos.logback.classic.filter.ThresholdFilter&quot;&gt;   
+      &lt;level&gt;INFO&lt;/level&gt;   
+    &lt;/filter&gt;   
+    &lt;encoder&gt;   
+      &lt;pattern&gt;   
+        %-4relative [%thread] %-5level %logger{30} - %msg%n   
+      &lt;/pattern&gt;   
+    &lt;/encoder&gt;   
+  &lt;/appender&gt;   
+  &lt;root level=&quot;DEBUG&quot;&gt;   
+    &lt;appender-ref ref=&quot;CONSOLE&quot; /&gt;   
+  &lt;/root&gt;   
+&lt;/configuration&gt;  
+</code></pre>
+<h3 id="多环节日志输出">多环节日志输出</h3>
+<p>通过springProfile 标签</p>
+<pre><code>&lt;configuration&gt;
+    ...
+ 
+    &lt;!-- 测试环境+开发环境. 多个使用逗号隔开. --&gt;
+    &lt;springProfile name=&quot;test,dev&quot;&gt;
+        &lt;logger name=&quot;com.example.demo.controller&quot; level=&quot;DEBUG&quot; additivity=&quot;false&quot;&gt;
+            &lt;appender-ref ref=&quot;consoleLog&quot;/&gt;
+        &lt;/logger&gt;
+    &lt;/springProfile&gt;
+ 
+    &lt;!-- 生产环境. --&gt;
+    &lt;springProfile name=&quot;prod&quot;&gt;
+        &lt;logger name=&quot;com.example.demo.controller&quot; level=&quot;INFO&quot; additivity=&quot;false&quot;&gt;
+            &lt;appender-ref ref=&quot;consoleLog&quot;/&gt;
+        &lt;/logger&gt;
+    &lt;/springProfile&gt;
+&lt;/configuration&gt;
+</code></pre>
+<pre><code>application.yml增加环境选择的配置active: dev
+ 
+server:
+  port: 9010
+ 
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?characterEncoding=utf8
+    username: root
+    password: root
+ 
+mybatis:
+    type-aliases-package: org.larry.springboot.entity
+    mapper-locations: classpath:mapper/**/*.xml
+    check-config-location: true
+ 
+active: 【test、dev、prod】，根据 active 的环境，自动采用上面配置的springProfile的 logger 日志
+</code></pre>
+<h3 id="自定义日志路径applicationxml">自定义日志路径（application.xml）</h3>
+<p>application.xml 增加日志相关自定义配置</p>
+<pre><code>logback:
+  logdir: /Users/inke/dev/log/tomcat/sell
+  appname: sell
+</code></pre>
+<p>在logback-spring.xml</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;configuration scan=&quot;true&quot; scanPeriod=&quot;60 seconds&quot; debug=&quot;false&quot;&gt;
+ 
+    &lt;!--application.yml 传递参数，不能使用logback 自带的&lt;property&gt;标签 --&gt;
+    &lt;springProperty scope=&quot;context&quot; name=&quot;appname&quot; source=&quot;logback.appname&quot;/&gt;
+    &lt;springProperty scope=&quot;context&quot; name=&quot;logdir&quot; source=&quot;logback.logdir&quot;/&gt;
+ 
+    &lt;contextName&gt;${appname}&lt;/contextName&gt;
+ 
+    &lt;!--输出到控制台 ConsoleAppender--&gt;
+    &lt;appender name=&quot;consoleLog&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;!--展示格式 layout--&gt;
+        &lt;layout class=&quot;ch.qos.logback.classic.PatternLayout&quot;&gt;
+            &lt;pattern&gt;
+                &lt;pattern&gt;%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n&lt;/pattern&gt;
+            &lt;/pattern&gt;
+        &lt;/layout&gt;
+    &lt;/appender&gt;
+</code></pre>
+
+                          </div>
+                        </div>
+                        <div class="layout-post-social">
+                          <div class="item reader">
+                            <div id="/post/ri-zhi-kuang-jia-zheng-li-logback/" class="leancloud-visitors view"
+                              data-flag-title="日志框架整理--logback">
+                              <span class="post-meta-item-text">阅读 </span>
+                              <span class="leancloud-visitors-count"></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="layout-post-navigation">
+                          <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="http://blog.801314.top/post/java-fan-xing-xiang-jie/" class="title">
+                                      <h4>Java 泛型详解</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2020-06-01</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+                            
+                          </div>
+                        </div>
+
+                        <div class="layout-comments"></div>
+                        
+                        <script type="text/javascript" src='http://blog.801314.top/media/scripts/zan.js'></script>
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/av-min.js'></script>
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/Valine.min.js'></script>
+
+<script>
+  var valine = new Valine();
+  valine.init({
+    el: '.layout-comments',
+    appId: 'zF1TA09DTcGGHk6VGTJsez35-gzGzoHsz',
+    appKey: '8agqkoocVd5mVgPbpjNqTKYx',
+    notify: false,
+    verify: false,
+    visitor: true,
+    avatar: 'mp',
+    placeholder: '加入讨论...'
+  })
+</script>
+                        
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2 d-none d-lg-block">
+                      <div class="layout-post-sidebar">
+                        <div class="layout-sidebar-item">
+                          <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE">自定义日志配置</a></li>
+<li><a href="#configuration">configuration</a></li>
+<li><a href="#appender">appender</a></li>
+<li><a href="#filter">filter</a></li>
+<li><a href="#%E5%A4%9A%E7%8E%AF%E8%8A%82%E6%97%A5%E5%BF%97%E8%BE%93%E5%87%BA">多环节日志输出</a></li>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97%E8%B7%AF%E5%BE%84applicationxml">自定义日志路径（application.xml）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-totop d-none"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+
+    	<div class="layout-footer">
+
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+					<div class="footer">
+						<div class="row">
+							<div class="col-12 col-md-9">
+								<div class="footer-copy">
+									
+									<span>© 2020.5.16 </span>
+									<a href="http://blog.801314.top" title="黑白杂色">黑白杂色</a>
+									<span class="px-2">⋅</span>
+									
+									Powered by <a href="https://github.com/getgridea/gridea" target="_blank">blackWhite</a>
+									<div class="footer-icp d-none d-sm-inline-block">
+										<span class="px-2">⋅</span>
+										
+										<a href="http://www.beian.miit.gov.cn" target="_blank">没有绝对的纯，黑白也是杂色 </a>
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 d-none d-md-block">
+								<div class="footer-links">
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="807727909" target="_blank">
+											<i class="fa fa-qq" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="https://weibo.com/p/1005053905393397/home?from=page_100505&amp;mod=TAB&amp;is_all=1#place" target="_blank">
+											<i class="fa fa-weibo" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="yue142556" target="_blank">
+											<i class="fa fa-weixin" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript" src='http://blog.801314.top/media/scripts/main.js'></script>
+	
+
+  </div>
+</body>
+
+</html>
