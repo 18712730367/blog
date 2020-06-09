@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+<title>linux 脚本 - 黑白杂色</title>
+<meta name="description" content="没有绝对的纯，黑白也是杂色">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type='text/css' rel='stylesheet' href='http://blog.801314.top/styles/main.css' media='screen' />
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css">
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/jquery.js'></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+  <div class="layout theme-dark">
+    <div class="layout-header">
+
+	<div class="layout-header-main">
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+
+					<div class="navbar">
+
+						<div class="logo">
+							<a href="http://blog.801314.top">
+								<img class="logo"
+									src="http://blog.801314.top/media/images/site_avatar.png?v=1591694372986"
+									alt="">
+							</a>
+						</div>
+
+						<div class="menu d-md-inline-block d-none">
+							<ul class="layout-navigation-list">
+								
+								<li class="layout-navigation-item"><a title="主页"
+										href="/">主页</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="历史文章"
+										href="/archives">历史文章</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="文章分类"
+										href="/tags">文章分类</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="联系我"
+										href="http://blog.801314.top/post/zuo-zhe">联系我</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="item d-md-inline-block d-none">
+							<div class="search-icon">
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</div>
+						</div>
+
+
+
+						<div class="d-md-inline-block d-none">
+							<div class="search-lightbox">
+								<div class="search-body">
+
+									<form id="gridea-search-form" data-update="1591694372986" action="/search/" class="search-form">
+										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
+										<button type="submit" class="submit" aria-label="Submit">
+											<i class="fa fa-search" aria-hidden="true"></i>
+										</button>
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="nav d-md-none d-inline-block">
+							<div class="trigger">
+								<i class="fa fa-bars layout-btn-toggle" aria-hidden="true"></i>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+
+
+
+		</div>
+	</div>
+
+</div>
+    <div class="layout-collapse d-md-none">
+	<div class="layout-collapse-main">
+		<ul class="layout-collapse-list">
+			
+			<li class="layout-collapse-item"><a title="主页" href="/">主页</a></li>
+			
+			<li class="layout-collapse-item"><a title="历史文章" href="/archives">历史文章</a></li>
+			
+			<li class="layout-collapse-item"><a title="文章分类" href="/tags">文章分类</a></li>
+			
+			<li class="layout-collapse-item"><a title="联系我" href="http://blog.801314.top/post/zuo-zhe">联系我</a></li>
+			
+
+		</ul>
+	</div>
+</div>
+
+    <div class="layout-content">
+      <div class="layout-content-main">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-12 col-lg-9">
+              <div class="layout-post">
+                <div class="layout-post-body">
+                  <div class="row">
+
+                    <div class="col-12 col-lg-10">
+                      <div class="layout-post-main m-right m-md-right">
+                        <div class="layout-post-header">
+                          <h1 class="layout-post-title">linux 脚本</h1>
+                          <div class="layout-post-meta">
+                            <div class="item">
+                              
+                            </div>
+                            <div class="item">
+                              <span>2020-06-09</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="layout-post-content">
+                          <div class="layout-post-item">
+                            
+                            <h3 id="什么是shell">什么是shell</h3>
+<p>shell 是操作系统的一个软件。它包在linux 内核外面，为用户和内核之间的交互提供了一个接口。系统中的命令用shell解释，shell接收系统回应的输出并显示其到屏幕中。</p>
+<h3 id="shell-脚本">shell 脚本。</h3>
+<p>脚本是一种解释型语言。</p>
+<ul>
+<li>保存执行动作</li>
+<li>判定命令的执行条件</li>
+<li>实现动作的批量执行</li>
+</ul>
+<h4 id="创建脚本">创建脚本</h4>
+<pre><code>vim test.sh  用vim编写脚本
+#! /bin/bash  脚本使用的解释器，通常用幻数 &quot;#!&quot; 指定
+#AUTHOR 脚本作者
+#DATE 脚本创作时间
+#MAIL 脚本作者联系方式
+#VERSION 脚本的版本
+</code></pre>
+<h4 id="脚本编写">脚本编写</h4>
+<pre><code>vim test.sh
+内容：
+#! /bin/bash
+watch -n 1 date
+</code></pre>
+<h4 id="执行脚本">执行脚本</h4>
+<ul>
+<li>sh test.sh</li>
+<li>chmod +x test.sh 加可执行权限 &amp;&amp; /mnt/test.sh 绝对路径的方式执行</li>
+</ul>
+<h4 id="脚本调试">脚本调试</h4>
+<p>用绝对路径执行后会显示执行脚本调用的解释器和执行结果</p>
+<pre><code>#! /bin/bash -x  (注意：-x)
+echo hello test
+
+执行：
+/mnt/test.sh
+输出：
++ echo hello test
+hello test
+</code></pre>
+<h4 id="脚本命令">脚本命令</h4>
+<ul>
+<li>diff<br>
+比较两个文件的不同</li>
+</ul>
+<pre><code>[num1,num2]a|c|d[num3,num4]
+num1,num2表示在第一个文件的行数
+a表示添加：add 
+c表示更改：change
+d表示删除：delete
+num3,num4 表示在第二个文件中的行数
+</code></pre>
+<pre><code>diff test1 test2
+</code></pre>
+<ul>
+<li>cut<br>
+用于字符串截取</li>
+</ul>
+<pre><code>cut -d              指定分隔符
+cut -f 1,7|1-7     指定截取的列
+cut -c 1,4|1-4     指定截取的字符位置
+</code></pre>
+<ul>
+<li>sort<br>
+用于字符排列</li>
+</ul>
+<pre><code>sort -n       纯数字排列
+sort -r       倒序
+sort -u       去掉重复数字
+sort -o       输出到指定文件中
+sort -t       指定分隔符
+sort -k       指定排序的列
+</code></pre>
+<ul>
+<li>uniq<br>
+对重复字符做相应的处理，配合sort用</li>
+</ul>
+<pre><code>uniq       对重复字符做相应的处理
+uniq -u    显示唯一的行
+uniq -d    显示重复的行
+uniq -c    每行显示一次并统计重复次数
+</code></pre>
+<ul>
+<li>&amp;&amp; 和 ||<br>
+是与非。<br>
+&amp;&amp; 用来执行条件成立后的命令<br>
+|| 用来执行条件不成立后的命令</li>
+</ul>
+<pre><code>#!/bin/bash
+ping -c1 -w1 $1 &amp;&gt;/dev/null   &amp;&amp; echo $1 is up   || echo $1 is down
+</code></pre>
+<ul>
+<li>test 和 [] 等同<br>
+test &quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;      等同 [&quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;]<br>
+[&quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;]         表示&quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;成立<br>
+[&quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mi mathvariant="normal">！</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;！=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mord cjk_fallback">！</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;]       表示&quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;不成立<br>
+[ -z &quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>]</mo><mi mathvariant="normal">表</mi><mi mathvariant="normal">示</mi></mrow><annotation encoding="application/x-tex">A&quot;]          表示</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mclose">]</span><span class="mord cjk_fallback">表</span><span class="mord cjk_fallback">示</span></span></span></span>A是否为空<br>
+[ -n &quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>]</mo><mi mathvariant="normal">表</mi><mi mathvariant="normal">示</mi></mrow><annotation encoding="application/x-tex">A&quot;]          表示</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mclose">]</span><span class="mord cjk_fallback">表</span><span class="mord cjk_fallback">示</span></span></span></span>A是否不为空</li>
+</ul>
+<p>整形数据比较：</p>
+<pre><code>参数：
+-eq   等于
+-ne   不等于
+-le   小于等于
+-lt   小于
+-ge   大于等于
+-gt   大于
+
+[ &quot;$a&quot; = &quot;$b&quot; -o &quot;$a&quot; -lt &quot;50&quot; ] $a是否等于$b，或者$a小于50
+[ &quot;$a&quot; = &quot;$b&quot; -a &quot;$a&quot; -lt &quot;50&quot; ] $a是否等于$b，并且$a小于50
+-o   表示或者
+-a   表示并且
+</code></pre>
+<pre><code>编辑脚本：vim check_num.sh   判定一个数字是否在0-10之间,脚本后面没数字显示please give me a number！，有数字进行判定在1-10输出yes否则输出no。
+#!/bin/bash
+[ -z &quot;$1&quot; ] &amp;&amp; {         判定脚本后第一穿字符是否为空
+       echo please give me a number !!
+       exit  1
+}
+[ &quot;$1&quot;  -gt &quot;0&quot; -a &quot;$1&quot;  -lt &quot;10&quot; ]    &amp;&amp; echo  yes || echo  no
+</code></pre>
+<ul>
+<li>test命令：判定文件的类型</li>
+</ul>
+<pre><code>参数:
+[ -e &quot;file&quot; ]    文件是否存在
+[ -f &quot;file&quot; ]    文件是否为普通文件
+[ -L &quot;file&quot; ]    文件时否为连接（软连接）
+[ -S &quot;file&quot; ]    文件是否为套接字
+[ -b &quot;file&quot; ]    文件是否为快设备
+[ -d &quot;file&quot; ]    文件是否为目录
+[ -c &quot;file&quot; ]    文件是否为字符设备
+ln -S /mnt/file  /mnt/hello    创建链接-s表示软链接，不加-s表示硬链接
+</code></pre>
+<p>判定文件是什么类型的文件</p>
+<pre><code>编写脚本：vim   file.sh    
+内容：
+#!/bin/bash
+[ -z &quot;$1&quot; ] &amp;&amp; {          脚本后是否为空
+       echo please give me a filename !!   为空输出please give me a filename !!
+       exit 1
+}
+[ -e $1 ] || {                文件是否存在
+    echo $1 is not file       文件不存在
+}
+[ -L $1 ] &amp;&amp; {                文件是否为连接
+    echo $1 is a link file    文件是连接
+    exit 1
+}
+[ -f $1 ] &amp;&amp; {                 文件是否为普通文件
+    echo $1 is a common file   文件是普通文件
+}
+[ -S $1 ] &amp;&amp; {                 文件是否为套接字
+   echo $1 is a sock file      文件是套接字
+}
+</code></pre>
+<ul>
+<li>tr<br>
+字符转换（文本内容）</li>
+</ul>
+<pre><code>tr 'a-z' 'A-Z'  &lt; /mnt/westos   &gt; /mnt/hello    
+将westox内容转化成大写并重定向到/mnt/hello中
+</code></pre>
+<ul>
+<li>find 查找</li>
+</ul>
+<pre><code>参数：
+-type          类型
+-size          大小
+-perm          权限
+-user          拥有着
+-group         所有组
+-name          名字
+-mindepth      最小深度
+-maxdepth      最大深度
+</code></pre>
+<pre><code>find /mnt/ -type l          查找/mnt/的连接的文件
+find /mnt/ -group student   查找/mnt/的student组的文件
+find  /mnt/ -user root -a  -group student   
+查找/mnt/的文件是root用户并且是student组的文件
+find  /mnt/ -user root -o  -group student   
+查找/mnt/的文件是root用户或者是student组的文件
+</code></pre>
+<pre><code>find /etc -maxdepth    深度查找
+find /etc -maxdepth 1 -name passwd    查找深度位1的文件
+find /etc -mindepth 1 -maxdepth 2 -name passwd    
+查找最小深度位1最大深度位2的文件
+</code></pre>
+
+                          </div>
+                        </div>
+                        <div class="layout-post-social">
+                          <div class="item reader">
+                            <div id="/post/linux-jiao-ben/" class="leancloud-visitors view"
+                              data-flag-title="linux 脚本">
+                              <span class="post-meta-item-text">阅读 </span>
+                              <span class="leancloud-visitors-count"></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="layout-post-navigation">
+                          <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="http://blog.801314.top/post/linux-find-atimectimemtime-tan-jiu/" class="title">
+                                      <h4>Linux -- Find atime/ctime/mtime 探究</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2020-06-09</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+                            
+                          </div>
+                        </div>
+
+                        <div class="layout-comments"></div>
+                        
+                        <script type="text/javascript" src='http://blog.801314.top/media/scripts/zan.js'></script>
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/av-min.js'></script>
+<script type="text/javascript" src='http://blog.801314.top/media/scripts/Valine.min.js'></script>
+
+<script>
+  var valine = new Valine();
+  valine.init({
+    el: '.layout-comments',
+    appId: 'zF1TA09DTcGGHk6VGTJsez35-gzGzoHsz',
+    appKey: '8agqkoocVd5mVgPbpjNqTKYx',
+    notify: false,
+    verify: false,
+    visitor: true,
+    avatar: 'mp',
+    placeholder: '加入讨论...'
+  })
+</script>
+                        
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2 d-none d-lg-block">
+                      <div class="layout-post-sidebar">
+                        <div class="layout-sidebar-item">
+                          <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AFshell">什么是shell</a></li>
+<li><a href="#shell-%E8%84%9A%E6%9C%AC">shell 脚本。</a>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E8%84%9A%E6%9C%AC">创建脚本</a></li>
+<li><a href="#%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99">脚本编写</a></li>
+<li><a href="#%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC">执行脚本</a></li>
+<li><a href="#%E8%84%9A%E6%9C%AC%E8%B0%83%E8%AF%95">脚本调试</a></li>
+<li><a href="#%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4">脚本命令</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-totop d-none"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+
+    	<div class="layout-footer">
+
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+					<div class="footer">
+						<div class="row">
+							<div class="col-12 col-md-9">
+								<div class="footer-copy">
+									
+									<span>© 2020.5.16 </span>
+									<a href="http://blog.801314.top" title="黑白杂色">黑白杂色</a>
+									<span class="px-2">⋅</span>
+									
+									Powered by <a href="https://github.com/getgridea/gridea" target="_blank">blackWhite</a>
+									<div class="footer-icp d-none d-sm-inline-block">
+										<span class="px-2">⋅</span>
+										
+										<a href="http://www.beian.miit.gov.cn" target="_blank">没有绝对的纯，黑白也是杂色 </a>
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 d-none d-md-block">
+								<div class="footer-links">
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="807727909" target="_blank">
+											<i class="fa fa-qq" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="https://weibo.com/p/1005053905393397/home?from=page_100505&amp;mod=TAB&amp;is_all=1#place" target="_blank">
+											<i class="fa fa-weibo" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+									
+									<span class="footer-links-item">
+										<a href="yue142556" target="_blank">
+											<i class="fa fa-weixin" aria-hidden="true"></i>
+										</a>
+									</span>
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript" src='http://blog.801314.top/media/scripts/main.js'></script>
+	
+
+  </div>
+</body>
+
+</html>
