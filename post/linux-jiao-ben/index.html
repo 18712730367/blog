@@ -33,7 +33,7 @@
 						<div class="logo">
 							<a href="http://blog.801314.top">
 								<img class="logo"
-									src="http://blog.801314.top/media/images/site_avatar.png?v=1591694372986"
+									src="http://blog.801314.top/media/images/site_avatar.png?v=1591697036574"
 									alt="">
 							</a>
 						</div>
@@ -72,7 +72,7 @@
 							<div class="search-lightbox">
 								<div class="search-body">
 
-									<form id="gridea-search-form" data-update="1591694372986" action="/search/" class="search-form">
+									<form id="gridea-search-form" data-update="1591697036574" action="/search/" class="search-form">
 										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
 										<button type="submit" class="submit" aria-label="Submit">
 											<i class="fa fa-search" aria-hidden="true"></i>
@@ -133,6 +133,8 @@
                           <h1 class="layout-post-title">linux 脚本</h1>
                           <div class="layout-post-meta">
                             <div class="item">
+                               <a href="http://blog.801314.top/tag/LndvJ3wpi/" class="post--keyword"
+                                data-title="linux 脚本" data-type="post_tag" data-term-id="39">linux 脚本</a>
                               
                             </div>
                             <div class="item">
@@ -145,6 +147,7 @@
                             
                             <h3 id="什么是shell">什么是shell</h3>
 <p>shell 是操作系统的一个软件。它包在linux 内核外面，为用户和内核之间的交互提供了一个接口。系统中的命令用shell解释，shell接收系统回应的输出并显示其到屏幕中。</p>
+<p>shell 是一个命令语言解释器，它拥有自己内建的shell命令集。</p>
 <h3 id="shell-脚本">shell 脚本。</h3>
 <p>脚本是一种解释型语言。</p>
 <ul>
@@ -182,6 +185,247 @@ echo hello test
 + echo hello test
 hello test
 </code></pre>
+<h4 id="shell-变量">shell 变量</h4>
+<ul>
+<li>shell 的变量赋值的时候不用带<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo separator="true">,</mo><mi mathvariant="normal">而</mi><mi mathvariant="normal">使</mi><mi mathvariant="normal">用</mi><mi mathvariant="normal">或</mi><mi mathvariant="normal">者</mi><mi mathvariant="normal">输</mi><mi mathvariant="normal">出</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">时</mi><mi mathvariant="normal">候</mi><mi mathvariant="normal">需</mi><mi mathvariant="normal">要</mi><mi mathvariant="normal">带</mi></mrow><annotation encoding="application/x-tex">, 而使用或者输出的时候需要带</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3em;vertical-align:-0.19444em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">而</span><span class="mord cjk_fallback">使</span><span class="mord cjk_fallback">用</span><span class="mord cjk_fallback">或</span><span class="mord cjk_fallback">者</span><span class="mord cjk_fallback">输</span><span class="mord cjk_fallback">出</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">时</span><span class="mord cjk_fallback">候</span><span class="mord cjk_fallback">需</span><span class="mord cjk_fallback">要</span><span class="mord cjk_fallback">带</span></span></span></span></li>
+<li>加减乘除的时候需要两层小括号，括号外面要有一个$, 括号里面的变量可以不用 $</li>
+<li>变量赋值，变量使用的时候不能有空格，否则会被解析为命令<br>
+代码示例：</li>
+</ul>
+<pre><code>#!/bin/bash
+
+a=10
+b=20
+c=&quot;this is a test&quot;
+d=$((a+b))
+e=$((a-b))
+f=$((a*b))
+g=$((a/b))
+h=$((a%b))
+i=$((a**3))
+
+echo $c
+echo &quot;a = &quot;$a          #输出a的值
+echo &quot;b = &quot;$b          #输出b的值
+echo &quot;a+b = &quot;${d}      #输出a+b的值
+echo &quot;a-b = &quot;${e}      #输出a-b的值
+echo &quot;a*b = &quot;${f}      #输出a*b的值
+echo &quot;a/b = &quot;${g}      #输出a/b的值
+echo &quot;a%b = &quot;${h}      #输出a%b的值
+echo &quot;a^3 = &quot;${i} 	   #输出a的3次方的值
+
+echo &quot;a+b = &quot;$((a+b))  #输出a+b的值
+echo &quot;a-b = &quot;$((a-b))  #输出a-b的值
+echo &quot;a*b = &quot;$((a*b))  #输出a*b的值
+echo &quot;a/b = &quot;$((a/b))  #输出a/b的值
+echo &quot;a%b = &quot;$((a%b))  #输出a%b的值
+echo &quot;a^3 = &quot;$((a**3)) #输出a的3次方的值
+
+echo $((a+b*a-b/a+a%b+a**2)) #表达式可以很长
+</code></pre>
+<ul>
+<li>shell 变量表达式</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>${#string}</td>
+<td>计算$string的长度</td>
+</tr>
+<tr>
+<td>${string:position}</td>
+<td>从pos开始提取字符串</td>
+</tr>
+<tr>
+<td>${string:position:len}</td>
+<td>从pos开始提取长度为len的字符串</td>
+</tr>
+<tr>
+<td>${string#substr}</td>
+<td>从开头删除最短匹配子串</td>
+</tr>
+<tr>
+<td>${string##substr}</td>
+<td>从开头删除最长匹配子串</td>
+</tr>
+<tr>
+<td>${string%substr}</td>
+<td>从结尾删除最短匹配子串</td>
+</tr>
+<tr>
+<td>${string%%substr}</td>
+<td>从结尾删除最长匹配子串</td>
+</tr>
+</tbody>
+</table>
+<pre><code>#!/bin/bash
+
+str=&quot;a b c d e f g h i j&quot;
+
+echo &quot;the source string is &quot;${str}                         #源字符串
+echo &quot;the string length is &quot;${#str}                        #字符串长度
+echo &quot;the 6th to last string is &quot;${str:5}                  #截取从第五个后面开始到最后的字符
+echo &quot;the 6th to 8th string is &quot;${str:5:2}                 #截取从第五个后面开始的2个字符
+echo &quot;after delete shortest string of start is &quot;${str#a*f} #从开头删除a到f的字符
+echo &quot;after delete widest string of start is &quot;${str##a*}   #从开头删除a以后的字符
+echo &quot;after delete shortest string of end is &quot;${str%f*j}   #从结尾删除f到j的字符
+echo &quot;after delete widest string of end is &quot;${str%%*j}     #从结尾删除j前面的所有字符包括j
+</code></pre>
+<ul>
+<li>shell 条件分支结构语句
+<ul>
+<li>单分支判定语句<pre><code>#!/bin/bash
+echo &quot;Please input a filename&quot;
+read filename
+if [ -f $filename ];then
+echo &quot;this file is a ordinary file.&quot;
+fi
+</code></pre>
+</li>
+<li>双分支判定语句<pre><code>    echo &quot;Please input a filename&quot;
+    read filename
+    if [ -f $filename ];then
+    echo &quot;this file is a ordinary file.&quot;
+    else
+    echo &quot;this file is not a ordinary file.&quot;
+    fi
+</code></pre>
+</li>
+<li>多分支判断语句<pre><code>    #!/bin/bash
+
+    echo &quot;Please input your math grades&quot;
+    read grades
+
+    if [ $grades -gt 100 ] || [ $grades -lt 0 ];then
+    echo &quot;Please input the number range in 0 - 100&quot;
+    fi
+
+    if [ $grades -ge 90 ] &amp;&amp; [ $grades -le 100 ];then
+    echo &quot;Your grade is excellent.&quot;
+    elif [ $grades -ge 80 ] &amp;&amp; [ $grades -le 89 ];then
+    echo &quot;Your grade is good.&quot;
+    elif [ $grades -ge 70 ] &amp;&amp; [ $grades -le 79 ];then
+    echo &quot;Your grade is middle.&quot;
+    elif [ $grades -ge 60 ] &amp;&amp; [ $grades -le 69 ];then
+    echo &quot;Your grade is passing.&quot;
+    else
+    echo &quot;Your grade is badly.&quot;
+    fi
+</code></pre>
+<pre><code>    #!/bin/bash
+
+    echo &quot;Please input a command&quot;
+    read cmd
+    case $cmd in
+    cpu)    echo &quot;The cpu information is&quot;
+            cat  /proc/cpuinfo;;
+    mem)    echo &quot;The mem information is&quot;
+            cat /proc/meminfo;;
+    device) echo &quot;The device information is&quot;
+            cat /proc/scsi/device_info;;
+    CD-ROM) echo &quot;The CD-ROM information is&quot;
+            cat /proc/sys/dev/cdrom/info;;
+    *)      echo &quot;Your input command is invalid&quot;
+    esac
+</code></pre>
+</li>
+</ul>
+</li>
+<li>shell 循环语句
+<ul>
+<li>while<br>
+while语句是只要条件为真就执行下面语句。<br>
+格式：<br>
+while 条件<br>
+do<br>
+语句<br>
+done<pre><code>    #!/bin/bash
+
+    i=$1
+    while [ $i -gt 0 ]
+    do
+    echo $i
+    ((i--))
+    done
+</code></pre>
+</li>
+<li>until<br>
+until语句是只要条件为假就执行下列语句<br>
+格式：<br>
+until 条件<br>
+do<br>
+语句<br>
+done<pre><code>    #!/bin/bash
+
+    i=$1
+    until [ $i -le 0 ]
+    do
+    echo $i
+    ((i--))
+    done
+</code></pre>
+</li>
+<li>for<br>
+格式：<br>
+for 变量 in 列表<br>
+do<br>
+语句<br>
+done<pre><code>    #!/bin/bash
+    for i in `seq 2 8` #seq是一个命令，顺序生成一串数字或者字符
+    do
+    echo $i
+    done
+</code></pre>
+</li>
+</ul>
+</li>
+<li>shell 函数<br>
+格式：</li>
+</ul>
+<pre><code>[function] funcName()
+{
+语句
+[return 返回值]
+}
+</code></pre>
+<p>返回值是可选的，如果没有显示return，则默认返回最后一条语句执行的结果。</p>
+<p>shell 函数的返回值只能是整数，一般用来表示函数执行成功与否，0表示成功，其他值表示失败。如果return 其他数据，比如一个字符串，会得到错误提示：&quot;numerical argument required&quot;</p>
+<p>如果一定要让函数返回字符串，可以先定义一个变量，用来接收函数的计算结果，脚本在需要的时候访问这个变量来获得函数返回值。</p>
+<p>函数参数从 $1 到 $n, $0表示文件名</p>
+<pre><code>#!/bin/bash
+
+#打印数字
+printNum()
+{
+   echo $1
+}
+
+for i in `seq 2 8` #seq是一个命令，顺序生成一串数字或者字符
+do
+printNum $i
+done
+</code></pre>
+<p>返回字符串，报错</p>
+<pre><code>#!/bin/bash
+
+#打印字符串
+printNum()
+{
+   return &quot;Hello&quot;
+}
+
+for i in `seq 2 8` #seq是一个命令，顺序生成一串数字或者字符
+do
+printNum
+done
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="http://blog.801314.top/post-images/1591697007753.jpg" alt="" loading="lazy"></figure>
 <h4 id="脚本命令">脚本命令</h4>
 <ul>
 <li>diff<br>
@@ -235,12 +479,14 @@ ping -c1 -w1 $1 &amp;&gt;/dev/null   &amp;&amp; echo $1 is up   || echo $1 is do
 </code></pre>
 <ul>
 <li>test 和 [] 等同<br>
-test &quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;      等同 [&quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;]<br>
-[&quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;]         表示&quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;成立<br>
-[&quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mi mathvariant="normal">！</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;！=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mord cjk_fallback">！</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;]       表示&quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">A&quot;=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>B&quot;不成立<br>
-[ -z &quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>]</mo><mi mathvariant="normal">表</mi><mi mathvariant="normal">示</mi></mrow><annotation encoding="application/x-tex">A&quot;]          表示</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mclose">]</span><span class="mord cjk_fallback">表</span><span class="mord cjk_fallback">示</span></span></span></span>A是否为空<br>
-[ -n &quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi mathvariant="normal">&quot;</mi><mo>]</mo><mi mathvariant="normal">表</mi><mi mathvariant="normal">示</mi></mrow><annotation encoding="application/x-tex">A&quot;]          表示</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mord">&quot;</span><span class="mclose">]</span><span class="mord cjk_fallback">表</span><span class="mord cjk_fallback">示</span></span></span></span>A是否不为空</li>
+注意：使用[] 的时候必须要每个变量之间要有空格，和左右中括号也要有空格，否则报错。</li>
 </ul>
+<pre><code>test &quot;$A&quot;=&quot;$B&quot;      等同 [&quot;$A&quot;=&quot;$B&quot;]
+[&quot;$A&quot;=&quot;$B&quot;]         表示&quot;$A&quot;=&quot;$B&quot;成立
+[&quot;$A&quot;！=&quot;$B&quot;]       表示&quot;$A&quot;=&quot;$B&quot;不成立
+[ -z &quot;$A&quot;]          表示$A是否为空
+[ -n &quot;$A&quot;]          表示$A是否不为空  
+</code></pre>
 <p>整形数据比较：</p>
 <pre><code>参数：
 -eq   等于
@@ -410,6 +656,7 @@ find /etc -mindepth 1 -maxdepth 2 -name passwd
 <li><a href="#%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99">脚本编写</a></li>
 <li><a href="#%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC">执行脚本</a></li>
 <li><a href="#%E8%84%9A%E6%9C%AC%E8%B0%83%E8%AF%95">脚本调试</a></li>
+<li><a href="#shell-%E5%8F%98%E9%87%8F">shell 变量</a></li>
 <li><a href="#%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4">脚本命令</a></li>
 </ul>
 </li>
